@@ -1,0 +1,48 @@
+[tool.poetry]
+name = "asymmetric"
+version = "0.0.1"
+description = "A powerful tool to enable super fast [async] module-to-API transformations. Learn in minutes, implement in seconds."
+license = "MIT"
+authors = ["Daniel Leal <dlleal@uc.cl>"]
+maintainers = ["Daniel Leal <dlleal@uc.cl>"]
+readme = "README.md"
+homepage = "https://asymmetric.one/"
+repository = "https://github.com/daleal/asymmetric"
+documentation = "https://asymmetric.one/docs/"
+classifiers = [
+    "Environment :: Web Environment",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+    "Topic :: Internet :: WWW/HTTP :: ASGI :: Application",
+    "Topic :: Software Development :: Libraries :: Application Frameworks",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+packages = [
+    { include = "asymmetric" },
+]
+exclude = [
+    ".github",
+    ".flake8",
+    ".pylintrc",
+    "assets",
+    "docs",
+    "environment.sh"
+]
+
+[tool.poetry.dependencies]
+python = "^3.6"
+starlette = "^0.13.8"
+
+[tool.poetry.dev-dependencies]
+flake8 = "^3.8.4"
+pylint = "^2.6.0"
+
+[tool.poetry.urls]
+"Issue Tracker" = "https://github.com/daleal/asymmetric/issues"
