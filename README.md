@@ -93,7 +93,7 @@ def another_function(a, b=372):
 
 ### Querying API endpoints
 
-To give parameters to a function, all we need to do is send a `json` body with the names of the parameters as keys. Let's see how! Run `symmetric run module` and send a `POST` request (the default `HTTP` method) to `http://127.0.0.1:8000/add`, now using the `httpx` module.
+To give parameters to a function, all we need to do is send a `json` body with the names of the parameters as keys. Let's see how! Run `uvicorn run:module` and send a `POST` request (the default `HTTP` method) to `http://127.0.0.1:8000/add`, now using the `httpx` module.
 
 ```python
 import httpx
