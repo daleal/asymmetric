@@ -2,7 +2,7 @@
 
 ![PyPI - Version](https://img.shields.io/pypi/v/asymmetric?style=for-the-badge&logo=python&color=306998&logoColor=%23fff&label=version)
 
-_The async framework that calls you back_! ✨ Enable ridiculously easy module-to-**[API](https://en.wikipedia.org/wiki/Web_API)** transformations. Learn in minutes, implement in seconds.
+_The async framework that calls you back_! ✨ Enable ridiculously fast and easy module-to-**[API](https://en.wikipedia.org/wiki/Web_API)** transformations. Learn in minutes, implement in seconds.
 
 ![Linters Workflow](https://img.shields.io/github/workflow/status/daleal/asymmetric/linters?label=linters&logo=github&style=for-the-badge)
 
