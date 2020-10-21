@@ -86,8 +86,8 @@ class CallbackClient:
         try:
             self.__validate_callback_json_data()
             self.__get_header_finders()
-        except InvalidCallbackObjectError as err:
-            self.__invalid_callback_object = str(err)
+        except InvalidCallbackObjectError as error:
+            self.__invalid_callback_object = str(error)
             log(str(error), info="warn")
             terminate_program()
 

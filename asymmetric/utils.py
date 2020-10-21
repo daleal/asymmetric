@@ -22,11 +22,10 @@ def handle_error(error):
     """Handles errors from the router."""
     if isinstance(error, AssertionError):
         return JSONResponse({})
-    else:
-        return JSONResponse(
-            {"message": str(error)},
-            status_code=500
-        )
+    return JSONResponse(
+        {"message": str(error)},
+        status_code=500
+    )
 
 
 def filter_params(function, data):
