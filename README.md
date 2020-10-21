@@ -146,7 +146,7 @@ Start the server with `uvicorn module:asymmetric` and now you are able to call t
 import httpx
 
 response = httpx.post(
-    "http://localhost:8000/predict",
+    "http://127.0.0.1:8000/predict",
     json={"data": mydata},
     headers={
         "asymmetric_callback_url": "http://callback.url/receive/predictions",
@@ -163,7 +163,7 @@ Wow... **What?!** You just witnessed **the magic of `asymmetric`**. The response
 import httpx
 
 response = httpx.post(
-    "http://localhost:8000/predict",
+    "http://127.0.0.1:8000/predict",
     json={"data": mydata},
     headers={
         "asymmetric_callback_url": "http://callback.url/receive/predictions",
@@ -198,7 +198,7 @@ Now, to achieve the same result as before, the requests must change their header
 import httpx
 
 response = httpx.post(
-    "http://localhost:8000/predict",
+    "http://127.0.0.1:8000/predict",
     json={"data": mydata},
     headers={
         "send_me_here": "http://callback.url/receive/predictions",
