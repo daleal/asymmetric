@@ -19,6 +19,7 @@ dist/
 
 # External program testing
 main.py
+callback_server.py
 caller.py
 
 # Auto-generated documentation

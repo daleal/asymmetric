@@ -4,6 +4,7 @@ A module for every utility of asymmetric.
 
 import inspect
 import json
+import sys
 from starlette.responses import JSONResponse
 
 
@@ -52,3 +53,8 @@ async def get_body(request):
         return body
     except json.decoder.JSONDecodeError:
         return {}
+
+
+def terminate_program():
+    """Terminates the server process."""
+    sys.exit(1)

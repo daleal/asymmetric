@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "asymmetric"
-version = "0.0.1"
-description = "A powerful tool to enable super fast [async] module-to-API transformations. Learn in minutes, implement in seconds."
+version = "0.1.0"
+description = "The async framework that calls you back! Enable ridiculously easy module-to-API transformations. Learn in minutes, implement in seconds."
 license = "MIT"
 authors = ["Daniel Leal <dlleal@uc.cl>"]
 maintainers = ["Daniel Leal <dlleal@uc.cl>"]
@@ -38,6 +38,8 @@ exclude = [
 [tool.poetry.dependencies]
 python = "^3.6"
 starlette = "^0.13.8"
+httpx = "^0.16.1"
+jsonschema = "^3.2.0"
 
 [tool.poetry.dev-dependencies]
 flake8 = "^3.8.4"
