@@ -132,6 +132,27 @@ Don't you hate it when people don't call you back after a date? We all have live
 Some functions may be **too heavy** to be executed to respond to an `HTTP` request. Maybe your function is a predictor of some sort, and it requires an hour of processing time to spit out results. Here's when the `callback` attribute of the `asymmetric` decorator comes into play! You can ask `asymmetric` to terminate the `HTTP` request **immediately**, keep processing stuff and then, once it finishes, **execute a request to a specified endpoint with the results**. Let's imagine that we have a `predict` endpoint that we want to transform into an `API`:
 
 ```python
+def predict(data):
+    values = Model.predict(data)
+
+    # One hour later...
+    return values
+```
+
+Just add the `asymmetric` decorator and you're good to go!
+
+```python
+@asymmetric.router("/predict", callback=True)
+def predict(data):
+    values = Model.predict(data)
+
+    # One hour later...
+    return values
+```
+
+Of course, if you rely on some `async` sorcery for your operations, `asymmetric` can handle it!
+
+```python
 @asymmetric.router("/predict", callback=True)
 async def predict(data):
     values = await Model.predict(data)
