@@ -5,7 +5,7 @@ A module for containing the endpoint logic of asymmetric.
 from asymmetric.errors import DuplicatedEndpointError
 
 
-class Endpoints:
+class Endpoints:  # pylint: disable=R0903
 
     """
     Class to encapsulate the endpoints logic.

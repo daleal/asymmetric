@@ -2,7 +2,7 @@
 
 ![PyPI - Version](https://img.shields.io/pypi/v/asymmetric?style=for-the-badge&logo=python&color=306998&logoColor=%23fff&label=version)
 
-_The async framework that calls you back_! ✨ Enable ridiculously easy module-to-**[API](https://en.wikipedia.org/wiki/Web_API)** transformations. Learn in minutes, implement in seconds.
+_The async framework that calls you back_! ✨ Enable ridiculously fast and easy module-to-**[API](https://en.wikipedia.org/wiki/Web_API)** transformations. Learn in minutes, implement in seconds.
 
 ![Linters Workflow](https://img.shields.io/github/workflow/status/daleal/asymmetric/linters?label=linters&logo=github&style=for-the-badge)
 
@@ -132,6 +132,27 @@ Don't you hate it when people don't call you back after a date? We all have live
 Some functions may be **too heavy** to be executed to respond to an `HTTP` request. Maybe your function is a predictor of some sort, and it requires an hour of processing time to spit out results. Here's when the `callback` attribute of the `asymmetric` decorator comes into play! You can ask `asymmetric` to terminate the `HTTP` request **immediately**, keep processing stuff and then, once it finishes, **execute a request to a specified endpoint with the results**. Let's imagine that we have a `predict` endpoint that we want to transform into an `API`:
 
 ```python
+def predict(data):
+    values = Model.predict(data)
+
+    # One hour later...
+    return values
+```
+
+Just add the `asymmetric` decorator and you're good to go!
+
+```python
+@asymmetric.router("/predict", callback=True)
+def predict(data):
+    values = Model.predict(data)
+
+    # One hour later...
+    return values
+```
+
+Of course, if you rely on some `async` sorcery for your operations, `asymmetric` can handle it!
+
+```python
 @asymmetric.router("/predict", callback=True)
 async def predict(data):
     values = await Model.predict(data)
@@ -146,7 +167,7 @@ Start the server with `uvicorn module:asymmetric` and now you are able to call t
 import httpx
 
 response = httpx.post(
-    "http://localhost:8000/predict",
+    "http://127.0.0.1:8000/predict",
     json={"data": mydata},
     headers={
         "asymmetric_callback_url": "http://callback.url/receive/predictions",
@@ -163,7 +184,7 @@ Wow... **What?!** You just witnessed **the magic of `asymmetric`**. The response
 import httpx
 
 response = httpx.post(
-    "http://localhost:8000/predict",
+    "http://127.0.0.1:8000/predict",
     json={"data": mydata},
     headers={
         "asymmetric_callback_url": "http://callback.url/receive/predictions",
@@ -198,7 +219,7 @@ Now, to achieve the same result as before, the requests must change their header
 import httpx
 
 response = httpx.post(
-    "http://localhost:8000/predict",
+    "http://127.0.0.1:8000/predict",
     json={"data": mydata},
     headers={
         "send_me_here": "http://callback.url/receive/predictions",
