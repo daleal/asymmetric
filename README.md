@@ -33,7 +33,7 @@ pip install asymmetric
 To start a server, choose your favorite `ASGI` server and target the `asymmetric` object!
 
 ```sh
-uvicorn run:<module>
+uvicorn <module>:asymmetric
 ```
 
 Where `<module>` is your module name (in the examples, we will be writing in a file named `module.py`, so the module name will be just `module`). A `Starlette` instance will be spawned immediately and can be reached at [http://127.0.0.1:8000](http://127.0.0.1:8000) by default. We don't have any endpoints yet, so we'll add some later.
@@ -67,7 +67,7 @@ def some_function():
     return "Hello World!"
 ```
 
-Run `uvicorn run:module` and send a `GET` request to `http://127.0.0.1:8000/sample`. You should get a `Hello World!` in response! (To try it with a browser, make sure to run the above command and click [this link](http://127.0.0.1:8000/sample)).
+Run `uvicorn module:asymmetric` and send a `GET` request to `http://127.0.0.1:8000/sample`. You should get a `Hello World!` in response! (To try it with a browser, make sure to run the above command and click [this link](http://127.0.0.1:8000/sample)).
 
 But what about methods with arguments? Of course they can be API'd too! Let's now say that you have the following function:
 
@@ -94,7 +94,7 @@ def another_function(a, b=372):
 
 ### Querying API endpoints
 
-To give parameters to a function, all we need to do is send a `json` body with the names of the parameters as keys. Let's see how! Run `uvicorn run:module` and send a `POST` request (the default `HTTP` method) to `http://127.0.0.1:8000/add`, now using the `httpx` module.
+To give parameters to a function, all we need to do is send a `json` body with the names of the parameters as keys. Let's see how! Run `uvicorn module:asymmetric` and send a `POST` request (the default `HTTP` method) to `http://127.0.0.1:8000/add`, now using the `httpx` module.
 
 ```python
 import httpx
@@ -140,7 +140,7 @@ async def predict(data):
     return values
 ```
 
-Start the server with `uvicorn run:module` and now you are able to call the endpoint using the following snippet:
+Start the server with `uvicorn module:asymmetric` and now you are able to call the endpoint using the following snippet:
 
 ```py
 import httpx
