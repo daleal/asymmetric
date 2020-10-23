@@ -20,19 +20,19 @@ tests:
 # Passive linters
 .PHONY: black
 black:
-	$(POETRY) run black asymmetric --check
+	$(POETRY) run black asymmetric tests --check
 
 .PHONY: flake8
 flake8:
-	$(POETRY) run flake8 asymmetric
+	$(POETRY) run flake8 asymmetric tests
 
 .PHONY: isort
 isort:
-	$(POETRY) run isort asymmetric --profile=black --check
+	$(POETRY) run isort asymmetric tests --profile=black --check
 
 .PHONY: mypy
 mypy:
-	$(POETRY) run mypy asymmetric
+	$(POETRY) run mypy asymmetric tests
 
 .PHONY: pylint
 pylint:
@@ -41,11 +41,11 @@ pylint:
 # Aggresive linters
 .PHONY: black!
 black!:
-	$(POETRY) run black asymmetric
+	$(POETRY) run black asymmetric tests
 
 .PHONY: isort!
 isort!:
-	$(POETRY) run isort asymmetric --profile=black
+	$(POETRY) run isort asymmetric tests --profile=black
 
 # Aggregated
 .PHONY: linters
