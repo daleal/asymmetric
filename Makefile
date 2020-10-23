@@ -23,7 +23,7 @@ flake8:
 
 .PHONY: isort
 isort:
-	$(POETRY) run isort asymmetric --check
+	$(POETRY) run isort asymmetric --profile=black --check
 
 .PHONY: mypy
 mypy:
@@ -40,7 +40,7 @@ black!:
 
 .PHONY: isort!
 isort!:
-	$(POETRY) run isort asymmetric
+	$(POETRY) run isort asymmetric --profile=black
 
 # Aggregated
 .PHONY: linters

@@ -6,6 +6,9 @@ import json
 import logging
 import logging.config
 import os
+from typing import Any, Callable, Dict
+
+from starlette.requests import Request
 
 from asymmetric.constants import LOG_FILE_NAME
 from asymmetric.utils import get_body
@@ -42,7 +45,7 @@ logging.config.dictConfig(
 )
 
 
-def log(message, level="info"):
+def log(message: str, level: str = "info") -> None:
     """
     Logs {message} with {level} level. Starts the log with '[[asymmetric]]'.
     """
@@ -50,7 +53,9 @@ def log(message, level="info"):
     logger(f"[[asymmetric]] {message}")
 
 
-async def log_request(request, route, function):
+async def log_request(
+    request: Request, route: str, function: Callable[..., Any]
+) -> None:
     """
     Logs a request, including the method used for the request, the
     route and the name of the python function being called. Then,
@@ -63,7 +68,7 @@ async def log_request(request, route, function):
     log_request_body(await get_body(request))
 
 
-def log_request_body(body):
+def log_request_body(body: Dict[str, Any]) -> None:
     """
     Logs a request body formatted as a json.
     """
