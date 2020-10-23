@@ -55,9 +55,7 @@ class CallbackClient:
             return self.__headers.get(location)
         return None
 
-    def handle_callback(
-        self, headers: Headers, params: Dict[str, Any]
-    ) -> JSONResponse:
+    def handle_callback(self, headers: Headers, params: Dict[str, Any]) -> JSONResponse:
         """
         Validates that the callback data from the request is correct
         and delegates the main function call. Returns a JSON response.
