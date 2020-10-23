@@ -2,13 +2,14 @@ import asyncio
 import json
 
 import pytest
+from starlette.requests import Request
 
 from asymmetric.errors import (
     DuplicatedEndpointError,
     InvalidCallbackHeadersError,
     InvalidCallbackObjectError,
 )
-from asymmetric.utils import generic_call, handle_error, filter_params
+from asymmetric.utils import generic_call, handle_error, filter_params, get_body
 
 
 class TestGenericCall:
@@ -126,3 +127,28 @@ class TestFilterParams:
         assert params_superset == {}
         assert params == {}
         assert params_subset == {}
+
+
+class TestGetBody:
+    def setup_method(self):
+        async def json_receive():
+            return {
+                "type": "http.request",
+                "body": b'{"message": "This is a test!"}'
+            }
+
+        async def empty_receive():
+            return {"type": "http.request"}
+
+        self.json_request = Request({"type": "http"}, json_receive)
+        self.empty_request = Request({"type": "http"}, empty_receive)
+
+    @pytest.mark.asyncio
+    async def test_get_body(self):
+        body = await get_body(self.json_request)
+        assert body == {"message": "This is a test!"}
+
+    @pytest.mark.asyncio
+    async def test_get_empty_body(self):
+        body = await get_body(self.empty_request)
+        assert body == {}
