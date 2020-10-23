@@ -70,7 +70,7 @@ def valid_plain_dict(data, validator):
         return False
 
     # Check for invalid types
-    if not all(map(lambda k: type(data[k]) == validator[k]["type"], attrs)):
+    if not all(map(lambda k: isinstance(data[k], validator[k]["type"]), attrs)):
         return False
 
     return True

@@ -27,7 +27,7 @@ isort:
 
 .PHONY: mypy
 mypy:
-	$(POETRY) run mypy asymmetric --check
+	$(POETRY) run mypy asymmetric
 
 .PHONY: pylint
 pylint:
