@@ -27,7 +27,15 @@ jobs:
       - name: Add system path to Poetry
         run: echo $HOME/.poetry/bin >> $GITHUB_PATH
 
+      - name: Set up Poetry cache
+        uses: actions/cache@v2
+        id: poetry-cache
+        with:
+          key: ${{ hashFiles('**/poetry.lock') }}
+          path: .venv
+
       - name: Install dependencies
+        if: steps.poetry-cache.outputs.cache-hit != 'true'
         run: poetry install
 
       - name: Lint with Black
@@ -49,7 +57,15 @@ jobs:
       - name: Add system path to Poetry
         run: echo $HOME/.poetry/bin >> $GITHUB_PATH
 
+      - name: Set up Poetry cache
+        uses: actions/cache@v2
+        id: poetry-cache
+        with:
+          key: ${{ hashFiles('**/poetry.lock') }}
+          path: .venv
+
       - name: Install dependencies
+        if: steps.poetry-cache.outputs.cache-hit != 'true'
         run: poetry install
 
       - name: Lint with Flake8
@@ -71,11 +87,49 @@ jobs:
       - name: Add system path to Poetry
         run: echo $HOME/.poetry/bin >> $GITHUB_PATH
 
+      - name: Set up Poetry cache
+        uses: actions/cache@v2
+        id: poetry-cache
+        with:
+          key: ${{ hashFiles('**/poetry.lock') }}
+          path: .venv
+
       - name: Install dependencies
+        if: steps.poetry-cache.outputs.cache-hit != 'true'
         run: poetry install
 
       - name: Lint with Isort
         run: make isort
+
+  mypy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.6
+
+      - name: Install Poetry
+        run: make get-poetry
+
+      - name: Add system path to Poetry
+        run: echo $HOME/.poetry/bin >> $GITHUB_PATH
+
+      - name: Set up Poetry cache
+        uses: actions/cache@v2
+        id: poetry-cache
+        with:
+          key: ${{ hashFiles('**/poetry.lock') }}
+          path: .venv
+
+      - name: Install dependencies
+        if: steps.poetry-cache.outputs.cache-hit != 'true'
+        run: poetry install
+
+      - name: Lint with Mypy
+        run: make mypy
 
   pylint:
     runs-on: ubuntu-latest
@@ -93,7 +147,15 @@ jobs:
       - name: Add system path to Poetry
         run: echo $HOME/.poetry/bin >> $GITHUB_PATH
 
+      - name: Set up Poetry cache
+        uses: actions/cache@v2
+        id: poetry-cache
+        with:
+          key: ${{ hashFiles('**/poetry.lock') }}
+          path: .venv
+
       - name: Install dependencies
+        if: steps.poetry-cache.outputs.cache-hit != 'true'
         run: poetry install
 
       - name: Lint with Pylint

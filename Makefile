@@ -25,6 +25,10 @@ flake8:
 isort:
 	$(POETRY) run isort asymmetric --check
 
+.PHONY: mypy
+mypy:
+	$(POETRY) run mypy asymmetric --check
+
 .PHONY: pylint
 pylint:
 	$(POETRY) run pylint asymmetric
@@ -44,6 +48,7 @@ linters:
 	$(MAKE) isort
 	$(MAKE) black
 	$(MAKE) flake8
+	$(MAKE) mypy
 	$(MAKE) pylint
 
 .PHONY: linters!
@@ -51,4 +56,5 @@ linters!:
 	$(MAKE) isort!
 	$(MAKE) black!
 	$(MAKE) flake8
+	$(MAKE) mypy
 	$(MAKE) pylint
