@@ -17,9 +17,17 @@ jobs:
           python-version: 3.6
 
       - name: Install Poetry
-        uses: dschep/install-poetry-action@v1.2
+        run: make get-poetry
+
+      - name: Set up Poetry cache
+        uses: actions/cache@v2
+        id: poetry-cache
+        with:
+          key: ${{ hashFiles('**/poetry.lock') }}
+          path: .venv
 
       - name: Install dependencies
+        if: steps.poetry-cache.outputs.cache-hit != 'true'
         run: poetry install
 
       - name: Build the package
