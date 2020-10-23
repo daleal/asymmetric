@@ -76,24 +76,9 @@ class TestFilterParams:
         self.function_no_params = lambda: None
 
         # Params
-        self.params_superset = {
-            "a": 1,
-            "b": 2,
-            "c": 3,
-            "d": 4,
-            "x": 5,
-            "y": 6,
-            "z": 7
-        }
-        self.params = {
-            "x": 1,
-            "y": 2,
-            "z": 3
-        }
-        self.params_subset = {
-            "x": 1,
-            "y": 2
-        }
+        self.params_superset = {"a": 1, "b": 2, "c": 3, "d": 4, "x": 5, "y": 6, "z": 7}
+        self.params = {"x": 1, "y": 2, "z": 3}
+        self.params_subset = {"x": 1, "y": 2}
 
     def test_params_superset_filter(self):
         """Tests that the params shrink to just the ones of the function."""
@@ -138,10 +123,7 @@ class TestFilterParams:
 class TestGetBody:
     def setup_method(self):
         async def json_receive():
-            return {
-                "type": "http.request",
-                "body": b'{"message": "This is a test!"}'
-            }
+            return {"type": "http.request", "body": b'{"message": "This is a test!"}'}
 
         async def empty_receive():
             return {"type": "http.request"}
@@ -163,42 +145,20 @@ class TestGetBody:
 class TestValidPlainDict:
     def setup_method(self):
         self.validator = {
-            "asymmetric": {
-                "required": True,
-                "type": bool
-            },
-            "name": {
-                "required": False,
-                "type": str
-            },
-            "age": {
-                "required": True,
-                "type": int
-            },
+            "asymmetric": {"required": True, "type": bool},
+            "name": {"required": False, "type": str},
+            "age": {"required": True, "type": int},
         }
         self.data_superset = {
             "asymmetric": True,
             "name": "Dani",
             "age": 22,
-            "lang": "Python"
+            "lang": "Python",
         }
-        self.data = {
-            "asymmetric": True,
-            "name": "Dani",
-            "age": 22
-        }
-        self.required_data = {
-            "asymmetric": True,
-            "age": 22
-        }
-        self.data_subset = {
-            "age": 22
-        }
-        self.invalid_types = {
-            "asymmetric": True,
-            "name": "Dani",
-            "age": 22.5
-        }
+        self.data = {"asymmetric": True, "name": "Dani", "age": 22}
+        self.required_data = {"asymmetric": True, "age": 22}
+        self.data_subset = {"age": 22}
+        self.invalid_types = {"asymmetric": True, "name": "Dani", "age": 22.5}
 
     def test_with_data_superset(self):
         valid = valid_plain_dict(self.data_superset, self.validator)
