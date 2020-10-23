@@ -51,7 +51,7 @@ class Asymmetric:
         route: str,
         methods: List[str] = ["post"],
         response_code: int = 200,
-        callback: Union[Dict[str, Any], bool] = False
+        callback: Union[Dict[str, Any], bool] = False,
     ) -> Callable[[Callable[..., Any]], Callable[..., Any]]:
         """
         Method to use for decorating the function wanting to be transformed
