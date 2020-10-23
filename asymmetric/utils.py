@@ -52,6 +52,30 @@ async def get_body(request):
         return {}
 
 
+def valid_plain_dict(data, validator):
+    """
+    Given a data and a validator array, checks if data includes the required
+    attributes and if it includes extra attributes.
+    """
+    possible_attrs = validator.keys()
+    required_attrs = filter(lambda k: validator[k]["required"], possible_attrs)
+    attrs = data.keys()
+
+    # Check for extra attributes
+    if not all(map(lambda x: x in possible_attrs, attrs)):
+        return False
+
+    # Check for required attributes
+    if not all(map(lambda x: x in attrs, required_attrs)):
+        return False
+
+    # Check for invalid types
+    if not all(map(lambda k: type(data[k]) == validator[k]["type"], attrs)):
+        return False
+
+    return True
+
+
 def terminate_program():
     """Terminates the server process."""
     sys.exit(1)

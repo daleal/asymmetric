@@ -39,7 +39,6 @@ exclude = [
 [tool.poetry.dependencies]
 python = "^3.6"
 httpx = "^0.16.1"
-jsonschema = "^3.2.0"
 starlette = "^0.13.8"
 
 [tool.poetry.dev-dependencies]
