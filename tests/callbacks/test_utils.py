@@ -7,7 +7,7 @@ class TestValidCallbackData:
             "callback_url_header": "https://github.com/daleal/asymmetric",
             "callback_method_header": "POST",
             "custom_callback_key_header": "data",
-            "custom_extra_header": "not_acceptable"
+            "custom_extra_header": "not_acceptable",
         }
         self.data = {
             "callback_url_header": "https://github.com/daleal/asymmetric",

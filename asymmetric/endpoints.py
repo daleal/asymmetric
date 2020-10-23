@@ -69,7 +69,7 @@ class Endpoints:  # pylint: disable=R0903
         Adds an endpoint for every method specified.
         """
         for method in methods:
-            self._add_endpoint(
+            self.__add_endpoint(
                 route,
                 method,
                 response_code,
@@ -77,7 +77,7 @@ class Endpoints:  # pylint: disable=R0903
                 decorated_function,
             )
 
-    def _add_endpoint(
+    def __add_endpoint(
         self,
         route: str,
         method: str,
@@ -90,7 +90,7 @@ class Endpoints:  # pylint: disable=R0903
         it raises an error. Otherwise, it creates the endpoint
         and stores it.
         """
-        if self._get_endpoint(route, method) is not None:
+        if self.__get_endpoint(route, method) is not None:
             message = f"Endpoint '{route}' with HTTP method '{method}' "
             message += "was defined twice."
             raise DuplicatedEndpointError(message)
@@ -103,12 +103,12 @@ class Endpoints:  # pylint: disable=R0903
             decorated_function,
         )
 
-        route_dictionary = self._get_route(route)
+        route_dictionary = self.__get_route(route)
         if route_dictionary is None:
-            route_dictionary = self._create_route(route)
+            route_dictionary = self.__create_route(route)
         route_dictionary[method] = endpoint
 
-    def _get_route(self, route: str) -> Optional[Dict[str, Endpoint]]:
+    def __get_route(self, route: str) -> Optional[Dict[str, Endpoint]]:
         """
         Returns the route dictionary containing each method
         as a key. If the route has not been used, returns None.
@@ -117,17 +117,17 @@ class Endpoints:  # pylint: disable=R0903
             return None
         return self.__endpoints[route]
 
-    def _create_route(self, route: str) -> Dict[str, Endpoint]:
+    def __create_route(self, route: str) -> Dict[str, Endpoint]:
         """Creates a route and returns it."""
         self.__endpoints[route] = {}
         return self.__endpoints[route]
 
-    def _get_endpoint(self, route: str, method: str) -> Optional[Endpoint]:
+    def __get_endpoint(self, route: str, method: str) -> Optional[Endpoint]:
         """
         Returns the endpoint object for a specific route/method
         combination. If said combination does not exist, returns None.
         """
-        route_data = self._get_route(route)
+        route_data = self.__get_route(route)
         if route_data is None:
             return None
         if method not in route_data:
