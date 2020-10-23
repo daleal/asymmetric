@@ -27,8 +27,9 @@ packages = [
     { include = "asymmetric" },
 ]
 exclude = [
-    ".flake8",
     ".github",
+    ".flake8",
+    ".isort.cfg",
     ".pylintrc",
     "assets",
     "docs",
