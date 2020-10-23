@@ -5,11 +5,13 @@ A module for every utility of asymmetric.
 import inspect
 import json
 import sys
+from typing import Any, Callable, Dict
+from starlette.requests import Request
 
 from starlette.responses import JSONResponse
 
 
-async def generic_call(function, params):
+async def generic_call(function: Callable[..., Any], params: Dict[str, Any]) -> Any:
     """
     Executes a function with its params, checking if said function
     is async or not
@@ -19,14 +21,14 @@ async def generic_call(function, params):
     return function(**params)
 
 
-def handle_error(error):
+def handle_error(error: Exception) -> JSONResponse:
     """Handles errors from the router."""
     if isinstance(error, AssertionError):
         return JSONResponse({})
     return JSONResponse({"message": str(error)}, status_code=500)
 
 
-def filter_params(function, data):
+def filter_params(function: Callable[..., Any], data: Dict[str, Any]) -> Dict[str, Any]:
     """Filters parameters so that the function recieves only what it needs."""
     # Get the parameters
     params = inspect.getfullargspec(function)
@@ -40,7 +42,7 @@ def filter_params(function, data):
     return {k: v for k, v in data.items() if k in params.args}
 
 
-async def get_body(request):
+async def get_body(request: Request) -> Dict[str, Any]:
     """
     Gets the body of the request and returns an empty dict if the request
     has no body.
@@ -52,7 +54,7 @@ async def get_body(request):
         return {}
 
 
-def valid_plain_dict(data, validator):
+def valid_plain_dict(data: Dict[str, Any], validator: Dict[str, Any]) -> bool:
     """
     Given a data and a validator array, checks if data includes the required
     attributes and if it includes extra attributes.
@@ -76,6 +78,6 @@ def valid_plain_dict(data, validator):
     return True
 
 
-def terminate_program():
+def terminate_program() -> None:
     """Terminates the server process."""
     sys.exit(1)
