@@ -17,7 +17,10 @@ jobs:
           python-version: 3.6
 
       - name: Install Poetry
-        uses: dschep/install-poetry-action@v1.2
+        run: make get-poetry
+
+      - name: Add system path to Poetry
+        run: echo $HOME/.poetry/bin >> $GITHUB_PATH
 
       - name: Install dependencies
         run: poetry install

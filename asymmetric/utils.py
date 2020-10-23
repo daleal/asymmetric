@@ -5,6 +5,7 @@ A module for every utility of asymmetric.
 import inspect
 import json
 import sys
+
 from starlette.responses import JSONResponse
 
 
@@ -22,10 +23,7 @@ def handle_error(error):
     """Handles errors from the router."""
     if isinstance(error, AssertionError):
         return JSONResponse({})
-    return JSONResponse(
-        {"message": str(error)},
-        status_code=500
-    )
+    return JSONResponse({"message": str(error)}, status_code=500)
 
 
 def filter_params(function, data):
@@ -52,6 +50,30 @@ async def get_body(request):
         return body
     except json.decoder.JSONDecodeError:
         return {}
+
+
+def valid_plain_dict(data, validator):
+    """
+    Given a data and a validator array, checks if data includes the required
+    attributes and if it includes extra attributes.
+    """
+    possible_attrs = validator.keys()
+    required_attrs = filter(lambda k: validator[k]["required"], possible_attrs)
+    attrs = data.keys()
+
+    # Check for extra attributes
+    if not all(map(lambda x: x in possible_attrs, attrs)):
+        return False
+
+    # Check for required attributes
+    if not all(map(lambda x: x in attrs, required_attrs)):
+        return False
+
+    # Check for invalid types
+    if not all(map(lambda k: isinstance(data[k], validator[k]["type"]), attrs)):
+        return False
+
+    return True
 
 
 def terminate_program():

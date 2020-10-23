@@ -3,6 +3,7 @@ The main module of asymmetric.
 """
 
 import asyncio
+
 from starlette.applications import Starlette
 from starlette.responses import JSONResponse
 
@@ -13,10 +14,10 @@ from asymmetric.errors import DuplicatedEndpointError
 from asymmetric.helpers import http_verb
 from asymmetric.loggers import log, log_request
 from asymmetric.utils import (
-    generic_call,
-    handle_error,
     filter_params,
+    generic_call,
     get_body,
+    handle_error,
     terminate_program,
 )
 
@@ -42,20 +43,12 @@ class Asymmetric:
         """
         return getattr(self.__app, attr)
 
-    def router(
-            self,
-            route,
-            methods=["post"],
-            response_code=200,
-            callback=False
-    ):
+    def router(self, route, methods=["post"], response_code=200, callback=False):
         """
         Method to use for decorating the function wanting to be transformed
         to an API.
         """
-        methods = [
-            http_verb(x) for x in methods if http_verb(x) in HTTP_METHODS
-        ]
+        methods = [http_verb(x) for x in methods if http_verb(x) in HTTP_METHODS]
 
         def decorator(function):
             """
@@ -69,8 +62,7 @@ class Asymmetric:
 
             @self.__app.route(route, methods=methods)
             async def wrapper(request):
-                asyncio.ensure_future(
-                    log_request(request, route, function))
+                asyncio.ensure_future(log_request(request, route, function))
 
                 try:
                     # Get the body
@@ -84,7 +76,7 @@ class Asymmetric:
                         # Process and return the result
                         return JSONResponse(
                             await generic_call(function, params),
-                            status_code=response_code
+                            status_code=response_code,
                         )
 
                     return callback_client.handle_callback(headers, params)
@@ -98,13 +90,14 @@ class Asymmetric:
                     methods,
                     response_code,
                     function,  # Save unchanged function
-                    wrapper,   # Save starlette decorated function
+                    wrapper,  # Save starlette decorated function
                 )
             except DuplicatedEndpointError as err:
                 log(f"DuplicatedRouteError: {err}", level="error")
                 terminate_program()  # TODO: exit the server correctly
 
             return function
+
         return decorator
 
 

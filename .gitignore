@@ -1,5 +1,6 @@
 # Python stuff
 __pycache__
+.mypy_cache
 
 # Build stuff
 build/

@@ -2,17 +2,15 @@
 A module for asymmetric's core callback logic.
 """
 
-import httpx
 import asyncio
+
+import httpx
 from starlette.responses import JSONResponse
 
 from asymmetric.callbacks.callback_object import CALLBACK_OBJECT_DEFAULTS
 from asymmetric.callbacks.utils import valid_callback_data
 from asymmetric.constants import HTTP_METHODS
-from asymmetric.errors import (
-    InvalidCallbackObjectError,
-    InvalidCallbackHeadersError
-)
+from asymmetric.errors import InvalidCallbackHeadersError, InvalidCallbackObjectError
 from asymmetric.loggers import log
 from asymmetric.utils import generic_call, terminate_program
 
@@ -33,11 +31,13 @@ class CallbackClient:
 
     @property
     def url(self):
+        """Returns the callback URL if it was included, or None."""
         location = self.__attribute_finders.get("callback_url_header")
         return self.__headers.get(location, None)
 
     @property
     def http_method(self):
+        """Returns the callback HTTP method if it was included, or POST."""
         location = self.__attribute_finders.get("callback_method_header")
         if location not in self.__headers:
             return "POST"  # Default HTTP method
@@ -45,6 +45,7 @@ class CallbackClient:
 
     @property
     def custom_key(self):
+        """Returns the custom callback key container if it was included, or None."""
         location = self.__attribute_finders.get("custom_callback_key_header")
         if location in self.__headers:
             return self.__headers.get(location)
@@ -58,8 +59,7 @@ class CallbackClient:
         if self.__invalid_callback_object:
             # Callback object was defective, server should have stopped
             return JSONResponse(
-                {"message": self.__invalid_callback_object},
-                status_code=500
+                {"message": self.__invalid_callback_object}, status_code=500
             )
 
         try:
@@ -88,7 +88,7 @@ class CallbackClient:
             self.__get_header_finders()
         except InvalidCallbackObjectError as error:
             self.__invalid_callback_object = str(error)
-            log(str(error), info="warn")
+            log(str(error), level="warn")
             terminate_program()
 
     def __validate_callback_json_data(self):
