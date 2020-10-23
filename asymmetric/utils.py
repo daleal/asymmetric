@@ -6,8 +6,8 @@ import inspect
 import json
 import sys
 from typing import Any, Callable, Dict
-from starlette.requests import Request
 
+from starlette.requests import Request
 from starlette.responses import JSONResponse
 
 
