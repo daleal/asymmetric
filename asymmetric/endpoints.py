@@ -15,12 +15,12 @@ class Endpoints:  # pylint: disable=R0903
         self.__endpoints = {}
 
     def add_endpoints(
-            self,
-            route,
-            methods,
-            response_code,
-            function,
-            decorated_function,
+        self,
+        route,
+        methods,
+        response_code,
+        function,
+        decorated_function,
     ):
         """
         Adds an endpoint for every method specified.
@@ -35,12 +35,12 @@ class Endpoints:  # pylint: disable=R0903
             )
 
     def __add_endpoint(
-            self,
-            route,
-            method,
-            response_code,
-            function,
-            decorated_function,
+        self,
+        route,
+        method,
+        response_code,
+        function,
+        decorated_function,
     ):
         """
         Checks if the desired endpoint does not exist. If it exists,
@@ -97,12 +97,12 @@ class Endpoint:
     """
 
     def __init__(
-            self,
-            route,
-            method,
-            response_code,
-            function,
-            decorated_function,
+        self,
+        route,
+        method,
+        response_code,
+        function,
+        decorated_function,
     ):
         self.__route = route
         self.__method = method
