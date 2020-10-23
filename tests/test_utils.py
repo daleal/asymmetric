@@ -8,7 +8,7 @@ from asymmetric.errors import (
     InvalidCallbackHeadersError,
     InvalidCallbackObjectError,
 )
-from asymmetric.utils import generic_call, handle_error
+from asymmetric.utils import generic_call, handle_error, filter_params
 
 
 class TestGenericCall:
@@ -59,3 +59,70 @@ class TestHandleError:
         response = handle_error(invalid_callback_object_error)
         assert json.loads(response.body)["message"] == self.message
         assert response.status_code == 500
+
+
+class TestFilterParams:
+    def setup_method(self):
+        # Functions
+        self.function = lambda x, y, z: x + y + z
+        self.function_kwargs = lambda x, y, z, **kwargs: x + y + z
+        self.function_no_params = lambda: None
+
+        # Params
+        self.params_superset = {
+            "a": 1,
+            "b": 2,
+            "c": 3,
+            "d": 4,
+            "x": 5,
+            "y": 6,
+            "z": 7
+        }
+        self.params = {
+            "x": 1,
+            "y": 2,
+            "z": 3
+        }
+        self.params_subset = {
+            "x": 1,
+            "y": 2
+        }
+
+    def test_params_superset_filter(self):
+        """Tests that the params shrink to just the ones of the function."""
+        params = filter_params(self.function, self.params_superset)
+        assert params == {"x": 5, "y": 6, "z": 7}
+
+    def test_params_filter(self):
+        """Tests that params don't change once filtered."""
+        params = filter_params(self.function, self.params)
+        assert params == self.params
+
+    def test_params_subset_filter(self):
+        """Tests that the params shrink to just the ones present on the function."""
+        params = filter_params(self.function, self.params_subset)
+        assert params == {"x": 1, "y": 2}
+
+    def test_params_superset_kwargs_filter(self):
+        """Tests that params don't change once filtered."""
+        params = filter_params(self.function_kwargs, self.params_superset)
+        assert params == self.params_superset
+
+    def test_params_kwargs_filter(self):
+        """Tests that params don't change once filtered."""
+        params = filter_params(self.function_kwargs, self.params)
+        assert params == self.params
+
+    def test_params_subset_kwargs_filter(self):
+        """Tests that params don't change once filtered."""
+        params = filter_params(self.function_kwargs, self.params_subset)
+        assert params == self.params_subset
+
+    def test_no_params_filter(self):
+        """Tests that params are completely filtered."""
+        params_superset = filter_params(self.function_no_params, self.params_superset)
+        params = filter_params(self.function_no_params, self.params)
+        params_subset = filter_params(self.function_no_params, self.params_subset)
+        assert params_superset == {}
+        assert params == {}
+        assert params_subset == {}
