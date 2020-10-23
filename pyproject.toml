@@ -27,12 +27,12 @@ packages = [
     { include = "asymmetric" },
 ]
 exclude = [
-    ".github",
     ".flake8",
+    ".github",
     ".pylintrc",
     "assets",
     "docs",
-    "environment.sh"
+    "Makefile"
 ]
 
 [tool.poetry.dependencies]

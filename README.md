@@ -279,15 +279,8 @@ cd asymmetric
 Recreate environment:
 
 ```sh
-./environment.sh
-
-. .venv/bin/activate
-```
-
-Test install:
-
-```sh
-poetry install
+make get-poetry
+make venv-with-dependencies
 ```
 
 ## Resources
