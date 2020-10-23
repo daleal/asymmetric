@@ -3,6 +3,7 @@ A module for asymmetric's core callback logic.
 """
 
 import asyncio
+from typing import Any, Callable, Dict, Optional, Union
 
 import httpx
 from starlette.responses import JSONResponse
@@ -21,37 +22,41 @@ class CallbackClient:
     A class to abstract the callback logic.
     """
 
-    def __init__(self, function, callback):
+    def __init__(
+        self, function: Callable[..., Any], callback: Union[Dict[str, Any], bool]
+    ) -> None:
         self.__function = function
         self.__callback = callback
-        self.__headers = {}
-        self.__params = {}
-        self.__attribute_finders = {}
-        self.__invalid_callback_object = False
+        self.__attribute_finders: Dict[str, str] = {}
+        self.__headers: Dict[str, str] = {}
+        self.__params: Dict[str, str] = {}
+        self.__invalid_callback_object = ""
 
     @property
-    def url(self):
+    def url(self) -> str:
         """Returns the callback URL if it was included, or None."""
         location = self.__attribute_finders.get("callback_url_header")
-        return self.__headers.get(location, None)
+        return self.__headers.get(location, "") if location is not None else ""
 
     @property
-    def http_method(self):
+    def http_method(self) -> str:
         """Returns the callback HTTP method if it was included, or POST."""
-        location = self.__attribute_finders.get("callback_method_header")
-        if location not in self.__headers:
-            return "POST"  # Default HTTP method
-        return self.__headers.get(location).upper()
+        location = self.__attribute_finders.get("callback_method_header", "")
+        # POST is the default HTTP method
+        http_method = self.__headers[location] if location in self.__headers else "POST"
+        return http_method.upper()
 
     @property
-    def custom_key(self):
+    def custom_key(self) -> Optional[str]:
         """Returns the custom callback key container if it was included, or None."""
         location = self.__attribute_finders.get("custom_callback_key_header")
         if location in self.__headers:
             return self.__headers.get(location)
         return None
 
-    def handle_callback(self, headers, params):
+    def handle_callback(
+        self, headers: Dict[str, str], params: Dict[str, Any]
+    ) -> JSONResponse:
         """
         Validates that the callback data from the request is correct
         and delegates the main function call. Returns a JSON response.
@@ -78,7 +83,7 @@ class CallbackClient:
         except InvalidCallbackHeadersError as error:
             return JSONResponse({"message": str(error)}, status_code=422)
 
-    def prepare_and_validate_finders(self):
+    def prepare_and_validate_finders(self) -> None:
         """
         Collects the callback data finders and validates
         that they are correct on decoration-time.
@@ -91,7 +96,7 @@ class CallbackClient:
             log(str(error), level="warn")
             terminate_program()
 
-    def __validate_callback_json_data(self):
+    def __validate_callback_json_data(self) -> None:
         """
         Validates that the callback dictionary is a valid callback
         dictionary or raises an error.
@@ -99,7 +104,7 @@ class CallbackClient:
         if not valid_callback_data(self.__callback):
             raise InvalidCallbackObjectError("Invalid callback object")
 
-    def __get_header_finders(self):
+    def __get_header_finders(self) -> None:
         """
         Gets the header attribute finders to search for some data
         on every request header on decoration-time.
@@ -115,15 +120,15 @@ class CallbackClient:
                 else:
                     self.__attribute_finders[attr] = default_value
 
-    def __validate_callback_url(self):
+    def __validate_callback_url(self) -> None:
         """
         Validates that the callback URL within the request
         header is valid.
         """
-        if self.url is None:
+        if not self.url:
             raise InvalidCallbackHeadersError("Invalid callback URL")
 
-    def __validate_callback_http_method(self):
+    def __validate_callback_http_method(self) -> None:
         """
         Validates that the callback HTTP method within the request
         header is valid.
@@ -131,7 +136,7 @@ class CallbackClient:
         if self.http_method.lower() not in HTTP_METHODS:
             raise InvalidCallbackHeadersError("Invalid callback HTTP method")
 
-    async def __callback_call(self):
+    async def __callback_call(self) -> None:
         """
         Executes the function and makes the request to the callback endpoint.
         """
