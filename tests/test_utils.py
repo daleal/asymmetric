@@ -9,7 +9,13 @@ from asymmetric.errors import (
     InvalidCallbackHeadersError,
     InvalidCallbackObjectError,
 )
-from asymmetric.utils import generic_call, handle_error, filter_params, get_body
+from asymmetric.utils import (
+    filter_params,
+    generic_call,
+    get_body,
+    handle_error,
+    valid_plain_dict,
+)
 
 
 class TestGenericCall:
@@ -152,3 +158,64 @@ class TestGetBody:
     async def test_get_empty_body(self):
         body = await get_body(self.empty_request)
         assert body == {}
+
+
+class TestValidPlainDict:
+    def setup_method(self):
+        self.validator = {
+            "asymmetric": {
+                "required": True,
+                "type": bool
+            },
+            "name": {
+                "required": False,
+                "type": str
+            },
+            "age": {
+                "required": True,
+                "type": int
+            },
+        }
+        self.data_superset = {
+            "asymmetric": True,
+            "name": "Dani",
+            "age": 22,
+            "lang": "Python"
+        }
+        self.data = {
+            "asymmetric": True,
+            "name": "Dani",
+            "age": 22
+        }
+        self.required_data = {
+            "asymmetric": True,
+            "age": 22
+        }
+        self.data_subset = {
+            "age": 22
+        }
+        self.invalid_types = {
+            "asymmetric": True,
+            "name": "Dani",
+            "age": 22.5
+        }
+
+    def test_with_data_superset(self):
+        valid = valid_plain_dict(self.data_superset, self.validator)
+        assert valid is False
+
+    def test_with_data(self):
+        valid = valid_plain_dict(self.data, self.validator)
+        assert valid is True
+
+    def test_with_required_data(self):
+        valid = valid_plain_dict(self.required_data, self.validator)
+        assert valid is True
+
+    def test_with_data_subset(self):
+        valid = valid_plain_dict(self.data_subset, self.validator)
+        assert valid is False
+
+    def test_with_invalid_types(self):
+        valid = valid_plain_dict(self.invalid_types, self.validator)
+        assert valid is False
