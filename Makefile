@@ -19,19 +19,19 @@ black:
 
 .PHONY: flake8
 flake8:
-	$(POETRY) run flake8 asymmetric
+	$(POETRY) run flake8 asymmetric --config=linters/flake8.cfg
 
 .PHONY: isort
 isort:
-	$(POETRY) run isort asymmetric --check
+	$(POETRY) run isort asymmetric --profile=black --check
 
 .PHONY: mypy
 mypy:
-	$(POETRY) run mypy asymmetric
+	$(POETRY) run mypy asymmetric --config-file=linters/mypy.cfg
 
 .PHONY: pylint
 pylint:
-	$(POETRY) run pylint asymmetric
+	$(POETRY) run pylint asymmetric --rcfile=linters/pylint.cfg
 
 # Aggresive linters
 .PHONY: black!
@@ -40,7 +40,7 @@ black!:
 
 .PHONY: isort!
 isort!:
-	$(POETRY) run isort asymmetric
+	$(POETRY) run isort asymmetric --profile=black
 
 # Aggregated
 .PHONY: linters
