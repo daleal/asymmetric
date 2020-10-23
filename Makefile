@@ -12,6 +12,11 @@ venv-with-dependencies:
 	$(POETRY) run pip install --upgrade pip
 	$(POETRY) run poetry install
 
+# Tests
+.PHONY: tests
+tests:
+	$(POETRY) run pytest --cov=asymmetric --cov-report=term-missing --cov-report=xml tests
+
 # Passive linters
 .PHONY: black
 black:

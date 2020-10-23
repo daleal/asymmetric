@@ -6,8 +6,9 @@ on:
     paths:
       - ".github/workflows/linters.yml"
       - ".flake8"
-      - ".isort.cfg"
       - ".pylintrc"
+      - "mypy.ini"
+      - "Makefile"
       - "asymmetric/**/*.py"
 
 jobs:
