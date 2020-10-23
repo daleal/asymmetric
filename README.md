@@ -4,7 +4,8 @@
 
 _The async framework that calls you back_! ✨ Enable ridiculously fast and easy module-to-**[API](https://en.wikipedia.org/wiki/Web_API)** transformations. Learn in minutes, implement in seconds.
 
-![Linters Workflow](https://img.shields.io/github/workflow/status/daleal/asymmetric/linters?label=linters&logo=github&style=for-the-badge)
+![Tests Coverage](https://img.shields.io/codecov/c/gh/daleal/asymmetric?color=%2344cc11&label=coverage&logo=codecov&logoColor=ffffff&style=for-the-badge)
+![Linters](https://img.shields.io/github/workflow/status/daleal/asymmetric/linters?label=linters&logo=github&style=for-the-badge)
 
 ## Why Asymmetric?
 
