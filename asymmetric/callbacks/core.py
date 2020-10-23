@@ -6,6 +6,7 @@ import asyncio
 from typing import Any, Callable, Dict, Optional, Union
 
 import httpx
+from starlette.datastructures import Headers
 from starlette.responses import JSONResponse
 
 from asymmetric.callbacks.callback_object import CALLBACK_OBJECT_DEFAULTS
@@ -28,7 +29,7 @@ class CallbackClient:
         self.__function = function
         self.__callback = callback
         self.__attribute_finders: Dict[str, str] = {}
-        self.__headers: Dict[str, str] = {}
+        self.__headers = Headers()
         self.__params: Dict[str, str] = {}
         self.__invalid_callback_object = ""
 
@@ -49,13 +50,13 @@ class CallbackClient:
     @property
     def custom_key(self) -> Optional[str]:
         """Returns the custom callback key container if it was included, or None."""
-        location = self.__attribute_finders.get("custom_callback_key_header")
+        location = self.__attribute_finders.get("custom_callback_key_header", "")
         if location in self.__headers:
             return self.__headers.get(location)
         return None
 
     def handle_callback(
-        self, headers: Dict[str, str], params: Dict[str, Any]
+        self, headers: Headers, params: Dict[str, Any]
     ) -> JSONResponse:
         """
         Validates that the callback data from the request is correct
