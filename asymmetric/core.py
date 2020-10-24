@@ -16,12 +16,7 @@ from asymmetric.endpoints import Endpoints
 from asymmetric.errors import DuplicatedEndpointError
 from asymmetric.helpers import http_verb
 from asymmetric.loggers import log, log_request
-from asymmetric.utils import (
-    filter_params,
-    generic_call,
-    get_body,
-    handle_error,
-)
+from asymmetric.utils import filter_params, generic_call, get_body, handle_error
 
 
 class Asymmetric:
