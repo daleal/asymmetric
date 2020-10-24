@@ -29,10 +29,8 @@ packages = [
 exclude = [
     ".github",
     ".flake8",
-    ".isort.cfg",
     ".pylintrc",
-    "assets",
-    "docs",
+    "mypy.ini",
     "Makefile"
 ]
 
@@ -47,6 +45,9 @@ flake8 = "^3.8.4"
 isort = "^5.6.4"
 mypy = "^0.790"
 pylint = "^2.6.0"
+pytest = "^6.1.1"
+pytest-asyncio = "^0.14.0"
+pytest-cov = "^2.10.1"
 
 [tool.poetry.urls]
 "Issue Tracker" = "https://github.com/daleal/asymmetric/issues"

@@ -23,8 +23,6 @@ async def generic_call(function: Callable[..., Any], params: Dict[str, Any]) -> 
 
 def handle_error(error: Exception) -> JSONResponse:
     """Handles errors from the router."""
-    if isinstance(error, AssertionError):
-        return JSONResponse({})
     return JSONResponse({"message": str(error)}, status_code=500)
 
 
