@@ -78,7 +78,7 @@ class CallbackClient:
             # Delegate function
             asyncio.ensure_future(self.__callback_call())
 
-            return JSONResponse({}, status_code=200)
+            return JSONResponse({}, status_code=202)
         except InvalidCallbackHeadersError as error:
             return JSONResponse({"message": str(error)}, status_code=422)
 

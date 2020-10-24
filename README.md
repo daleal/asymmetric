@@ -179,7 +179,7 @@ response = httpx.post(
 print(response)
 ```
 
-Wow... **What?!** You just witnessed **the magic of `asymmetric`**. The response will be available **immediately** with a `200` status code. Meanwhile, the server will keep processing the request. When it finishes, **it will make a `POST` request to the endpoint specified in the headers** with the content of the method's return value. Cool, right? But what if I want to send the content of the method's return value inside a `json`, as the value of a `predictions` key? Well, that's easy! Just change the headers!
+Wow... **What?!** You just witnessed **the magic of `asymmetric`**. The response will be available **immediately** with a `202` status code. Meanwhile, the server will keep processing the request. When it finishes, **it will make a `POST` request to the endpoint specified in the headers** with the content of the method's return value. Cool, right? But what if I want to send the content of the method's return value inside a `json`, as the value of a `predictions` key? Well, that's easy! Just change the headers!
 
 ```py
 import httpx
