@@ -21,7 +21,6 @@ from asymmetric.utils import (
     generic_call,
     get_body,
     handle_error,
-    terminate_program,
 )
 
 
@@ -102,8 +101,8 @@ class Asymmetric:
                     wrapper,  # Save starlette decorated function
                 )
             except DuplicatedEndpointError as err:
-                log(f"DuplicatedRouteError: {err}", level="error")
-                terminate_program()  # TODO: exit the server correctly
+                log(f"DuplicatedEndpointError: {err}", level="critical")
+                raise DuplicatedEndpointError(err)
 
             return function
 
