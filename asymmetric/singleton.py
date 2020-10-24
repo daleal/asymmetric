@@ -5,7 +5,7 @@ A module for containing the singleton metaclass for the _Asymmetric class.
 from typing import Any
 
 
-class _AsymmetricSingleton(type):
+class AsymmetricSingleton(type):
 
     """
     Singleton metaclass to limit the existance of the asymmetric object to one.

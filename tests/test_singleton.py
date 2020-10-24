@@ -1,7 +1,7 @@
-from asymmetric.singleton import _AsymmetricSingleton
+from asymmetric.singleton import AsymmetricSingleton
 
 
-class InstanciatedSingleton(metaclass=_AsymmetricSingleton):
+class InstanciatedSingleton(metaclass=AsymmetricSingleton):
     pass
 
 

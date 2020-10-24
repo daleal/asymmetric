@@ -16,11 +16,11 @@ from asymmetric.endpoints import Endpoints
 from asymmetric.errors import DuplicatedEndpointError
 from asymmetric.helpers import http_verb
 from asymmetric.loggers import log, log_request
-from asymmetric.singleton import _AsymmetricSingleton
+from asymmetric.singleton import AsymmetricSingleton
 from asymmetric.utils import filter_params, generic_call, get_body, handle_error
 
 
-class _Asymmetric(metaclass=_AsymmetricSingleton):
+class _Asymmetric(metaclass=AsymmetricSingleton):
 
     """
     Main class to encapsulate every important feature of
