@@ -23,10 +23,20 @@ def generate_parser() -> ArgumentParser:
 
     # Add version command
     parser.add_argument(
-        "-v",
+        "-V",
         "--version",
         action="version",
+        help="show verbose program's version number and exit",
         version=f"asymmetric version {asymmetric.__version__}",
+    )
+
+    # Add version number command
+    parser.add_argument(
+        "-v",
+        "--version-number",
+        action="version",
+        help="show program's version number and exit",
+        version=f"{asymmetric.__version__}",
     )
 
     return parser
