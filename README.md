@@ -265,7 +265,6 @@ By default, you can `GET` the `/docs` endpoint (using a browser) to access to **
 
 - _Automagic_ OpenAPI spec isn't being generated rigth now, so that's missing from the library. It will soon be added, though, as it is a very useful _feature_.
 - Parse callback `URL`s to make sure that they are valid `URL`s, and fail if they aren't.
-- On some initialization errors, the server should stop to _avoid avoidable errors_. Right now, the method to stop the server really does nothing, so that's something that should be addressed in the near future.
 
 ## Developing
 
@@ -282,6 +281,18 @@ Recreate environment:
 ```sh
 make get-poetry
 make venv-with-dependencies
+```
+
+Run the linters:
+
+```sh
+make linters
+```
+
+Run the tests:
+
+```sh
+make tests
 ```
 
 ## Resources
