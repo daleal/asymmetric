@@ -2,50 +2,50 @@
 A module for containing the loggers of asymmetric.
 """
 
+import json
 import logging
 import logging.config
-import json
 import os
+from typing import Any, Callable, Dict
+
+from starlette.requests import Request
 
 from asymmetric.constants import LOG_FILE_NAME
 from asymmetric.utils import get_body
 
-
 # Logging configuration
-logging.config.dictConfig({
-    "version": 1,
-    "formatters": {
-        "console": {
-            "format": "[%(asctime)s] [%(levelname)s] %(module)s: %(message)s"
+logging.config.dictConfig(
+    {
+        "version": 1,
+        "formatters": {
+            "console": {
+                "format": "[%(asctime)s] [%(levelname)s] %(module)s: %(message)s"
+            },
+            "file": {
+                "format": (
+                    "[%(asctime)s] [%(levelname)s] %(pathname)s - "
+                    "line %(lineno)d: \n%(message)s\n"
+                )
+            },
         },
-        "file": {
-            "format": ("[%(asctime)s] [%(levelname)s] %(pathname)s - "
-                       "line %(lineno)d: \n%(message)s\n")
-        }
-    },
-    "handlers": {
-        "console": {
-            "class": "logging.StreamHandler",
-            "stream": "ext://sys.stderr",
-            "formatter": "console"
+        "handlers": {
+            "console": {
+                "class": "logging.StreamHandler",
+                "stream": "ext://sys.stderr",
+                "formatter": "console",
+            },
+            "file": {
+                "class": "logging.FileHandler",
+                "filename": os.getenv("LOG_FILE", default=LOG_FILE_NAME),
+                "formatter": "file",
+            },
         },
-        "file": {
-            "class": "logging.FileHandler",
-            "filename": os.getenv(
-                "LOG_FILE",
-                default=LOG_FILE_NAME
-            ),
-            "formatter": "file"
-        }
-    },
-    "root": {
-        "level": "INFO",
-        "handlers": ["console", "file"]
+        "root": {"level": "INFO", "handlers": ["console", "file"]},
     }
-})
+)
 
 
-def log(message, level="info"):
+def log(message: str, level: str = "info") -> None:
     """
     Logs {message} with {level} level. Starts the log with '[[asymmetric]]'.
     """
@@ -53,7 +53,9 @@ def log(message, level="info"):
     logger(f"[[asymmetric]] {message}")
 
 
-async def log_request(request, route, function):
+async def log_request(
+    request: Request, route: str, function: Callable[..., Any]
+) -> None:
     """
     Logs a request, including the method used for the request, the
     route and the name of the python function being called. Then,
@@ -66,13 +68,11 @@ async def log_request(request, route, function):
     log_request_body(await get_body(request))
 
 
-def log_request_body(body):
+def log_request_body(body: Dict[str, Any]) -> None:
     """
     Logs a request body formatted as a json.
     """
-    log("Request Body:\n" + json.dumps(
-        body,
-        indent=2,
-        sort_keys=False,
-        ensure_ascii=False
-    ))
+    log(
+        "Request Body:\n"
+        + json.dumps(body, indent=2, sort_keys=False, ensure_ascii=False)
+    )

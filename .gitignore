@@ -1,5 +1,9 @@
-# Python stuff
+# Python, linters and tests stuff
 __pycache__
+.mypy_cache
+.pytest_cache
+.coverage
+coverage.xml
 
 # Build stuff
 build/
@@ -12,7 +16,6 @@ dist/
 
 # Virtual Environment
 .venv
-.testing-venv
 
 # Logs
 *.log
@@ -24,8 +27,3 @@ caller.py
 
 # Auto-generated documentation
 openapi.json
-
-# Jekyll site
-_site
-.jekyll-cache
-Gemfile.lock

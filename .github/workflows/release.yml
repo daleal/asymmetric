@@ -6,7 +6,7 @@ on:
       - stable
 
 jobs:
-  pypi:
+  pypi-release:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -17,7 +17,10 @@ jobs:
           python-version: 3.6
 
       - name: Install Poetry
-        uses: dschep/install-poetry-action@v1.2
+        run: make get-poetry
+
+      - name: Add system path to Poetry
+        run: echo $HOME/.poetry/bin >> $GITHUB_PATH
 
       - name: Install dependencies
         run: poetry install
@@ -30,3 +33,42 @@ jobs:
         with:
           user: __token__
           password: ${{ secrets.PYPI_API_TOKEN }}
+
+  github-release:
+    needs: pypi-release
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install Poetry
+        run: make get-poetry
+
+      - name: Add system path to Poetry
+        run: echo $HOME/.poetry/bin >> $GITHUB_PATH
+
+      - name: Install dependencies
+        run: poetry install
+
+      - name: Get version
+        id: version
+        run: |
+          echo ::set-output name=version::$(out=$(poetry run asymmetric --version) && echo ${${out}##* })
+
+      - name: Get Pull Request data
+        uses: jwalton/gh-find-current-pr@v1
+        id: find-pr
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Tag and Release
+        uses: actions/create-release@latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.tag.outputs.version }}
+          release_name: ${{ steps.tag.outputs.version }}
+          body: |
+            ${{ steps.find-pr.outputs.body }}
+          draft: false
+          prerelease: false

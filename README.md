@@ -4,7 +4,8 @@
 
 _The async framework that calls you back_! ✨ Enable ridiculously fast and easy module-to-**[API](https://en.wikipedia.org/wiki/Web_API)** transformations. Learn in minutes, implement in seconds.
 
-![Linters Workflow](https://img.shields.io/github/workflow/status/daleal/asymmetric/linters?label=linters&logo=github&style=for-the-badge)
+![Tests Coverage](https://img.shields.io/codecov/c/gh/daleal/asymmetric?color=%2344cc11&label=coverage&logo=codecov&logoColor=ffffff&style=for-the-badge)
+![Linters](https://img.shields.io/github/workflow/status/daleal/asymmetric/linters?label=linters&logo=github&style=for-the-badge)
 
 ## Why Asymmetric?
 
@@ -129,7 +130,7 @@ async def another_async_function(a, b=372):
 
 Don't you hate it when people don't call you back after a date? We all have lived that annoying experience. But don't worry! `asymmetric` **will** call you back!
 
-Some functions may be **too heavy** to be executed to respond to an `HTTP` request. Maybe your function is a predictor of some sort, and it requires an hour of processing time to spit out results. Here's when the `callback` attribute of the `asymmetric` decorator comes into play! You can ask `asymmetric` to terminate the `HTTP` request **immediately**, keep processing stuff and then, once it finishes, **execute a request to a specified endpoint with the results**. Let's imagine that we have a `predict` endpoint that we want to transform into an `API`:
+Some functions may be **too heavy** to be executed to respond to an `HTTP` request. Maybe your function is a predictor of some sort, and it requires an hour of processing time to spit out results. Here's when the `callback` parameter of the `asymmetric` decorator comes into play! You can ask `asymmetric` to terminate the `HTTP` request **immediately**, keep processing stuff and then, once it finishes, **execute a request to a specified endpoint with the results**. Let's imagine that we have a `predict` endpoint that we want to transform into an `API`:
 
 ```python
 def predict(data):
@@ -178,7 +179,7 @@ response = httpx.post(
 print(response)
 ```
 
-Wow... **What?!** You just witnessed **the magic of `asymmetric`**. The response will be available **immediately** with a `200` status code. Meanwhile, the server will keep processing the request. When it finishes, **it will make a `POST` request to the endpoint specified in the headers** with the content of the method's return value. Cool, right? But what if I want to send the content of the method's return value inside a `json`, as the value of a `predictions` key? Well, that's easy! Just change the headers!
+Wow... **What?!** You just witnessed **the magic of `asymmetric`**. The response will be available **immediately** with a `202` status code. Meanwhile, the server will keep processing the request. When it finishes, **it will make a `POST` request to the endpoint specified in the headers** with the content of the method's return value. Cool, right? But what if I want to send the content of the method's return value inside a `json`, as the value of a `predictions` key? Well, that's easy! Just change the headers!
 
 ```py
 import httpx
@@ -279,15 +280,8 @@ cd asymmetric
 Recreate environment:
 
 ```sh
-./environment.sh
-
-. .venv/bin/activate
-```
-
-Test install:
-
-```sh
-poetry install
+make get-poetry
+make venv-with-dependencies
 ```
 
 ## Resources
