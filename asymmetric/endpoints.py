@@ -91,7 +91,7 @@ class Endpoints:  # pylint: disable=R0903
         and stores it.
         """
         if self.__get_endpoint(route, method) is not None:
-            message = f"Endpoint '{route}' with HTTP method '{method}' "
+            message = f"Endpoint '{route}' with HTTP method '{method.upper()}' "
             message += "was defined twice."
             raise DuplicatedEndpointError(message)
 

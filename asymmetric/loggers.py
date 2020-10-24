@@ -10,39 +10,42 @@ from typing import Any, Callable, Dict
 
 from starlette.requests import Request
 
-from asymmetric.constants import LOG_FILE_NAME
 from asymmetric.utils import get_body
 
 # Logging configuration
-logging.config.dictConfig(
-    {
-        "version": 1,
-        "formatters": {
-            "console": {
-                "format": "[%(asctime)s] [%(levelname)s] %(module)s: %(message)s"
-            },
-            "file": {
-                "format": (
-                    "[%(asctime)s] [%(levelname)s] %(pathname)s - "
-                    "line %(lineno)d: \n%(message)s\n"
-                )
-            },
+configuration: Dict[str, Any] = {
+    "version": 1,
+    "formatters": {
+        "console": {"format": "[%(asctime)s] [%(levelname)s] %(module)s: %(message)s"},
+        "file": {
+            "format": (
+                "[%(asctime)s] [%(levelname)s] %(pathname)s - "
+                "line %(lineno)d: \n%(message)s\n"
+            )
         },
-        "handlers": {
-            "console": {
-                "class": "logging.StreamHandler",
-                "stream": "ext://sys.stderr",
-                "formatter": "console",
-            },
-            "file": {
-                "class": "logging.FileHandler",
-                "filename": os.getenv("LOG_FILE", default=LOG_FILE_NAME),
-                "formatter": "file",
-            },
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "stream": "ext://sys.stderr",
+            "formatter": "console",
         },
-        "root": {"level": "INFO", "handlers": ["console", "file"]},
+    },
+    "root": {
+        "level": os.getenv("LOG_LEVEL", "WARNING"),
+        "handlers": ["console"],
+    },
+}
+
+if os.getenv("LOG_FILE") is not None:
+    configuration["handlers"]["file"] = {
+        "class": "logging.FileHandler",
+        "filename": os.getenv("LOG_FILE"),
+        "formatter": "file",
     }
-)
+    configuration["root"]["handlers"].append("file")
+
+logging.config.dictConfig(configuration)
 
 
 def log(message: str, level: str = "info") -> None:

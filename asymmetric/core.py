@@ -16,13 +16,7 @@ from asymmetric.endpoints import Endpoints
 from asymmetric.errors import DuplicatedEndpointError
 from asymmetric.helpers import http_verb
 from asymmetric.loggers import log, log_request
-from asymmetric.utils import (
-    filter_params,
-    generic_call,
-    get_body,
-    handle_error,
-    terminate_program,
-)
+from asymmetric.utils import filter_params, generic_call, get_body, handle_error
 
 
 class Asymmetric:
@@ -101,9 +95,9 @@ class Asymmetric:
                     function,  # Save unchanged function
                     wrapper,  # Save starlette decorated function
                 )
-            except DuplicatedEndpointError as err:
-                log(f"DuplicatedRouteError: {err}", level="error")
-                terminate_program()  # TODO: exit the server correctly
+            except DuplicatedEndpointError as error:
+                log(f"DuplicatedEndpointError: {error}", level="critical")
+                raise DuplicatedEndpointError(error) from error
 
             return function
 
