@@ -41,6 +41,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Set up Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.6
+
       - name: Install Poetry
         run: make get-poetry
 
@@ -52,7 +57,7 @@ jobs:
 
       - name: Get version
         id: version
-        run: echo ::set-output name=version::$(poetry run asymmetric --version-number)
+        run: echo ::set-output name=version::$(poetry run asymmetric --version | rev | cut -d' ' -f1 | rev)
 
       - name: Get Pull Request data
         uses: jwalton/gh-find-current-pr@v1
