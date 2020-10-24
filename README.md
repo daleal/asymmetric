@@ -11,7 +11,7 @@ _The async framework that calls you back_! ✨ Enable ridiculously fast and easy
 
 Raw developing speed and ease of use, that's why. `asymmetric` is based on **[Starlette](https://github.com/encode/starlette)** ✨! While `Starlette` is a powerful tool to have, getting it to work from scratch can be a bit of a pain, especially if you have never used it before. The idea behind `asymmetric` is to be able to take any module **already written** and transform it into a working API in a matter of minutes, instead of having to design the module ground-up to work with `Starlette` (it can also be used to build an API from scratch really fast). With `asymmetric`, you will also get some neat features, namely:
 
-- Auto logging.
+- Auto logging (configure logs with the `LOG_FILE` and `LOG_LEVEL` environmental variables).
 - Server-side error detection and exception handling.
 - **Asynchronous callback endpoints** to make a request, terminate the request **immediately** and then have the server make a request to a _callback_ endpoint with the results! ✨
 - ~~Auto-generated `/docs` endpoint for your API with **interactive documentation**.~~ **[UNDER CONSTRUCTION]**
