@@ -10,7 +10,6 @@ from typing import Any, Callable, Dict
 
 from starlette.requests import Request
 
-from asymmetric.constants import LOG_FILE_NAME
 from asymmetric.utils import get_body
 
 # Logging configuration

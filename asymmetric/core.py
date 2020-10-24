@@ -95,9 +95,9 @@ class Asymmetric:
                     function,  # Save unchanged function
                     wrapper,  # Save starlette decorated function
                 )
-            except DuplicatedEndpointError as err:
-                log(f"DuplicatedEndpointError: {err}", level="critical")
-                raise DuplicatedEndpointError(err)
+            except DuplicatedEndpointError as error:
+                log(f"DuplicatedEndpointError: {error}", level="critical")
+                raise DuplicatedEndpointError(error) from error
 
             return function
 

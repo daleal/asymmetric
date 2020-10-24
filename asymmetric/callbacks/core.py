@@ -93,7 +93,7 @@ class CallbackClient:
             self.__get_header_finders()
         except InvalidCallbackObjectError as error:
             log(str(error), level="critical")
-            raise InvalidCallbackObjectError(error)
+            raise InvalidCallbackObjectError(error) from error
 
     def __validate_callback_json_data(self) -> None:
         """
