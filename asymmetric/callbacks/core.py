@@ -3,6 +3,7 @@ A module for asymmetric's core callback logic.
 """
 
 import asyncio
+import json
 from typing import Any, Callable, Dict, Optional, Union
 
 import httpx
@@ -14,7 +15,7 @@ from asymmetric.callbacks.utils import valid_callback_data
 from asymmetric.constants import HTTP_METHODS
 from asymmetric.errors import InvalidCallbackHeadersError, InvalidCallbackObjectError
 from asymmetric.loggers import log
-from asymmetric.utils import generic_call, terminate_program
+from asymmetric.utils import generic_call
 
 
 class CallbackClient:
@@ -91,9 +92,8 @@ class CallbackClient:
             self.__validate_callback_json_data()
             self.__get_header_finders()
         except InvalidCallbackObjectError as error:
-            self.__invalid_callback_object = str(error)
-            log(str(error), level="warn")
-            terminate_program()
+            log(str(error), level="critical")
+            raise InvalidCallbackObjectError(error)
 
     def __validate_callback_json_data(self) -> None:
         """
@@ -101,7 +101,12 @@ class CallbackClient:
         dictionary or raises an error.
         """
         if not valid_callback_data(self.__callback):
-            raise InvalidCallbackObjectError("Invalid callback object")
+            raise InvalidCallbackObjectError(
+                "Invalid callback object:\n"
+                + json.dumps(
+                    self.__callback, indent=2, sort_keys=False, ensure_ascii=False
+                )
+            )
 
     def __get_header_finders(self) -> None:
         """

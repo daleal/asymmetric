@@ -74,8 +74,3 @@ def valid_plain_dict(data: Dict[str, Any], validator: Dict[str, Any]) -> bool:
         return False
 
     return True
-
-
-def terminate_program() -> None:
-    """Terminates the server process."""
-    sys.exit(1)
