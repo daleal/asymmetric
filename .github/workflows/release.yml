@@ -53,7 +53,7 @@ jobs:
       - name: Get version
         id: version
         run: |
-        echo ::set-output name=version::$(out=$(poetry run asymmetric --version) && echo ${${out}##* })
+          echo ::set-output name=version::$(out=$(poetry run asymmetric --version) && echo ${${out}##* })
 
       - name: Get Pull Request data
         uses: jwalton/gh-find-current-pr@v1
