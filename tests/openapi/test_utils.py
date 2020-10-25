@@ -13,6 +13,7 @@ from asymmetric.openapi.utils import (
     get_openapi_endpoint_body_schema,
     get_openapi_endpoint_headers_schema,
     get_openapi_endpoint_responses_schema,
+    get_openapi_endpoint_schema,
     get_parameters_amount,
 )
 
@@ -270,6 +271,7 @@ class TestGetOpenAPIEndpointHeadersSchema:
                 print("wrapping...")
                 function()
                 print("unwrapping...")
+
             return wrapper
 
         def create_endpoint(callback):
@@ -406,3 +408,148 @@ class TestGetOpenAPIEndpointResponsesSchema:
     def test_annotated_callback_endpoint(self):
         schema = get_openapi_endpoint_responses_schema(self.annotated_callback_endpoint)
         assert schema == self.annotated_callback_schema
+
+
+class TestGetOpenAPIEndpointSchema:
+    def setup_method(self):
+        def get_function():
+            return "This is a test!"
+
+        def post_function(x, y):
+            """POST-it!"""
+            return x + y
+
+        def decorator(function):
+            def wrapper():
+                print("wrapping...")
+                function()
+                print("unwrapping...")
+            return wrapper
+
+        def create_endpoint(function, method, callback):
+            return Endpoint(
+                "/v1/test/open/api",
+                "GET",
+                function,
+                decorator(function),
+                callback=callback,
+            )
+
+        self.no_callback_endpoints = {
+            "get": create_endpoint(get_function, "get", False),
+            "post": create_endpoint(post_function, "post", False),
+        }
+        self.callback_endpoints = {
+            "get": create_endpoint(get_function, "get", True),
+            "post": create_endpoint(post_function, "post", True),
+        }
+
+    def test_no_callback_schema_generation(self):
+        schema = get_openapi_endpoint_schema(self.no_callback_endpoints)
+        assert schema == {
+            "get": {
+                "description": "No description provided.",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/SuccesfulOperation",
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalError",
+                    },
+                },
+            },
+            "post": {
+                "description": "POST-it!",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/SuccesfulOperation",
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalError",
+                    },
+                },
+                "requestBody": {
+                    "required": True,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "x": {"oneOf": ANY_TYPE},
+                                    "y": {"oneOf": ANY_TYPE},
+                                },
+                                "additionalProperties": False,
+                            },
+                        },
+                    },
+                },
+            },
+        }
+
+    def test_callback_schema_generation(self):
+        schema = get_openapi_endpoint_schema(self.callback_endpoints)
+        assert schema == {
+            "get": {
+                "description": "No description provided.",
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": header,
+                        "schema": {
+                            "type": "string",
+                        },
+                        "required": CALLBACK_OBJECT_METADATA[key]["required"],
+                        "description": CALLBACK_OBJECT_METADATA[key]["description"],
+                    }
+                    for key, header in CALLBACK_OBJECT_DEFAULTS.items()
+                ],
+                "responses": {
+                    "202": {
+                        "$ref": "#/components/responses/AcceptedOperation",
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalError",
+                    },
+                },
+            },
+            "post": {
+                "description": "POST-it!",
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": header,
+                        "schema": {
+                            "type": "string",
+                        },
+                        "required": CALLBACK_OBJECT_METADATA[key]["required"],
+                        "description": CALLBACK_OBJECT_METADATA[key]["description"],
+                    }
+                    for key, header in CALLBACK_OBJECT_DEFAULTS.items()
+                ],
+                "responses": {
+                    "202": {
+                        "$ref": "#/components/responses/AcceptedOperation",
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalError",
+                    },
+                },
+                "requestBody": {
+                    "required": True,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "x": {"oneOf": ANY_TYPE},
+                                    "y": {"oneOf": ANY_TYPE},
+                                },
+                                "additionalProperties": False,
+                            },
+                        },
+                    },
+                },
+            },
+        }

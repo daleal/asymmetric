@@ -109,26 +109,28 @@ def get_openapi_endpoint_responses_schema(endpoint: Endpoint) -> Dict[str, Any]:
     return responses
 
 
-# def get_openapi_endpoint_schema(route_dict: Dict[str, Endpoint]) -> Dict[str, Any]:
-#     """
-#     Generate the OpenAPI documentation for dictionary of endpoints for a specific route.
-#     """
-#     route_schema = {}
-#     for http_method, endpoint in route_dict.items():
-#         body_schema = get_openapi_endpoint_body_schema(endpoint)
-#         responses_schema = get_openapi_endpoint_responses_schema(endpoint)
-#         route_schema[http_method.lower()] = {
-#             "description": endpoint.docstring,
-#             "responses": responses_schema,
-#         }
-#         has_properties = bool(body_schema["properties"])
-#         has_body = has_properties or bool(body_schema["additionalProperties"])
-#         if has_body:
-#             route_schema[http_method.lower()]["requestBody"] = {
-#                 "required": has_properties,
-#                 "content": {"application/json": {"schema": body_schema}},
-#             }
-#     return route_schema
+def get_openapi_endpoint_schema(route_dict: Dict[str, Endpoint]) -> Dict[str, Any]:
+    """
+    Generate the OpenAPI documentation for dictionary of endpoints for a specific route.
+    """
+    route_schema = {}
+    for http_method, endpoint in route_dict.items():
+        headers_schema = get_openapi_endpoint_headers_schema(endpoint)
+        body_schema = get_openapi_endpoint_body_schema(endpoint)
+        responses_schema = get_openapi_endpoint_responses_schema(endpoint)
+        route_schema[http_method.lower()] = {
+            "description": endpoint.docstring,
+            "parameters": headers_schema,
+            "responses": responses_schema,
+        }
+        has_properties = bool(body_schema["properties"])
+        has_body = has_properties or bool(body_schema["additionalProperties"])
+        if has_body:
+            route_schema[http_method.lower()]["requestBody"] = {
+                "required": has_properties,
+                "content": {"application/json": {"schema": body_schema}},
+            }
+    return route_schema
 
 
 # def get_openapi(sym_obj, title, version="0.0.1", openapi_version="3.0.3"):
