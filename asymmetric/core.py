@@ -63,9 +63,9 @@ class _Asymmetric(metaclass=AsymmetricSingleton):
     def __setup(self) -> None:
         """Sets up the API."""
         # Set up the endpoint for the openapi json schema
-        @self.router(OPENAPI_SPEC_ROUTE, methods=["get"])
-        def openapi_schema() -> Dict[str, Any]:
-            return self.openapi
+        @self.__app.route(OPENAPI_SPEC_ROUTE)
+        def openapi_schema(request: Request) -> JSONResponse:
+            return JSONResponse(self.openapi)
 
         # Set up the endpoint for the Swagger interactive documentation
         @self.__app.route(SWAGGER_DOCUMENTATION_ROUTE)

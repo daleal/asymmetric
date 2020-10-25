@@ -30,16 +30,3 @@ def type_to_string(type_obj: Any) -> str:
         return "object"
     except Exception:
         return "object"
-
-
-def is_not_docs(route: str) -> bool:
-    """Checks if a route is not a documentation-related route."""
-    # Check that the route is not the schema route
-    not_schema = route != OPENAPI_SPEC_ROUTE
-    # Check that the route is not the Swagger interactive documentation route
-    not_swagger_documentation = route != SWAGGER_DOCUMENTATION_ROUTE
-    # Check that the route is not the ReDoc interactive documentation route
-    not_redoc_documentation = route != REDOC_DOCUMENTATION_ROUTE
-
-    # Return if the route is neither of the documentation routes
-    return not_schema and not_swagger_documentation and not_redoc_documentation
