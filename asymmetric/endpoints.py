@@ -17,15 +17,17 @@ class Endpoint:
         self,
         route: str,
         method: str,
-        response_code: int,
         function: Callable[..., Any],
         decorated_function: Callable[..., Any],
+        callback: bool = False,
+        response_code: int = 200,
     ) -> None:
         self.__route: str = route
         self.__method: str = method
-        self.__response_code: int = response_code
         self.__function: Callable[..., Any] = function
         self.__decorated_function: Callable[..., Any] = decorated_function
+        self.__callback: bool = callback
+        self.__response_code: int = response_code
 
     @property
     def route(self) -> str:
@@ -39,8 +41,13 @@ class Endpoint:
 
     @property
     def response_code(self) -> int:
-        """Returns the response code of the endpoint."""
-        return self.__response_code
+        """Returns the response code of the endpoint on a request."""
+        return self.__response_code if not self.__callback else 202
+
+    @property
+    def callback(self) -> bool:
+        """Returns the response code of the endpoint on a request."""
+        return self.__callback
 
     @property
     def function(self) -> Callable[..., Any]:
@@ -61,9 +68,10 @@ class Endpoints:  # pylint: disable=R0903
         self,
         route: str,
         methods: List[str],
-        response_code: int,
         function: Callable[..., Any],
         decorated_function: Callable[..., Any],
+        callback: bool = False,
+        response_code: int = 200,
     ) -> None:
         """
         Adds an endpoint for every method specified.
@@ -72,18 +80,20 @@ class Endpoints:  # pylint: disable=R0903
             self.__add_endpoint(
                 route,
                 method,
-                response_code,
                 function,
                 decorated_function,
+                callback=callback,
+                response_code=response_code,
             )
 
     def __add_endpoint(
         self,
         route: str,
         method: str,
-        response_code: int,
         function: Callable[..., Any],
         decorated_function: Callable[..., Any],
+        callback: bool = False,
+        response_code: int = 200,
     ) -> None:
         """
         Checks if the desired endpoint does not exist. If it exists,
@@ -98,9 +108,10 @@ class Endpoints:  # pylint: disable=R0903
         endpoint = Endpoint(
             route,
             method,
-            response_code,
             function,
             decorated_function,
+            callback=callback,
+            response_code=response_code,
         )
 
         route_dictionary = self.__get_route(route)

@@ -92,9 +92,10 @@ class _Asymmetric(metaclass=AsymmetricSingleton):
                 self.__endpoints.add_endpoints(
                     route,
                     methods,
-                    response_code,
                     function,  # Save unchanged function
                     wrapper,  # Save starlette decorated function
+                    callback=bool(callback),
+                    response_code=response_code,
                 )
             except DuplicatedEndpointError as error:
                 log(f"DuplicatedEndpointError: {error}", level="critical")

@@ -25,16 +25,30 @@ class TestEndpointClass:
         instance = Endpoint(
             self.route,
             self.method,
-            self.response_code,
             self.function,
             self.decorated_function,
+            response_code=self.response_code,
         )
 
         assert isinstance(instance, Endpoint) is True
         assert instance.route == self.route
         assert instance.method == self.method
-        assert instance.response_code == self.response_code
         assert instance.function == self.function
+        assert instance.callback is False
+        assert instance.response_code == self.response_code
+
+    def test_endpoint_callback_response_code(self):
+        instance = Endpoint(
+            self.route,
+            self.method,
+            self.function,
+            self.decorated_function,
+            callback=True,
+            response_code=self.response_code,
+        )
+        assert instance.callback is True
+        assert instance.response_code != self.response_code
+        assert instance.response_code == 202
 
 
 class TestEndpointsClass:
@@ -52,7 +66,6 @@ class TestEndpointsClass:
 
         self.route = "/v1/test/endpoint/class"
         self.methods = ["GET", "POST", "PATCH"]
-        self.response_code = 200
         self.function = function
         self.decorated_function = decorator(function)
 
@@ -84,7 +97,6 @@ class TestEndpointsClass:
         endpoint_object = Endpoint(
             self.route,
             self.methods[0],
-            self.response_code,
             self.function,
             self.decorated_function,
         )
@@ -98,7 +110,6 @@ class TestEndpointsClass:
         self.endpoints._Endpoints__add_endpoint(
             self.route,
             self.methods[0],
-            self.response_code,
             self.function,
             self.decorated_function,
         )
@@ -110,7 +121,6 @@ class TestEndpointsClass:
         self.endpoints._Endpoints__add_endpoint(
             self.route,
             self.methods[0],
-            self.response_code,
             self.function,
             self.decorated_function,
         )
@@ -118,7 +128,6 @@ class TestEndpointsClass:
         self.endpoints._Endpoints__add_endpoint(
             self.route,
             self.methods[1],
-            self.response_code,
             self.function,
             self.decorated_function,
         )
@@ -134,7 +143,6 @@ class TestEndpointsClass:
             self.endpoints._Endpoints__add_endpoint(
                 self.route,
                 self.methods[0],
-                self.response_code,
                 self.function,
                 self.decorated_function,
             )
@@ -142,7 +150,6 @@ class TestEndpointsClass:
             self.endpoints._Endpoints__add_endpoint(
                 self.route,
                 self.methods[0],
-                self.response_code,
                 self.function,
                 self.decorated_function,
             )
@@ -151,7 +158,6 @@ class TestEndpointsClass:
         self.endpoints.add_endpoints(
             self.route,
             self.methods,
-            self.response_code,
             self.function,
             self.decorated_function,
         )

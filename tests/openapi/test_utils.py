@@ -176,7 +176,6 @@ class TestGetOpenAPIBodySchema:
             return Endpoint(
                 "/v1/test/open/api",
                 "GET",
-                200,
                 function,
                 decorator(function),
             )
