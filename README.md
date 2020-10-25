@@ -20,7 +20,7 @@ _The async framework that calls you back_! ✨ Enable ridiculously fast and easy
 
 ## Why Asymmetric?
 
-Raw developing speed and ease of use, that's why. `asymmetric` is based on **[Starlette](https://github.com/encode/starlette)** ✨! While `Starlette` is a powerful tool to have, getting it to work from scratch can be a bit of a pain, especially if you have never used it before. The idea behind `asymmetric` is to be able to take any module **already written** and transform it into a working API in a matter of minutes, instead of having to design the module ground-up to work with `Starlette` (it can also be used to build an API from scratch really fast). With `asymmetric`, you will also get some neat features, namely:
+Raw developing speed and ease of use, that's why. `asymmetric` is based on **[S](https://github.com/encode/S)** ✨! While `S` is a powerful tool to have, getting it to work from scratch can be a bit of a pain, especially if you have never used it before. The idea behind `asymmetric` is to be able to take any module **already written** and transform it into a working API in a matter of minutes, instead of having to design the module ground-up to work with `S` (it can also be used to build an API from scratch really fast). With `asymmetric`, you will also get some neat features, namely:
 
 - Auto logging (configure logs with the `LOG_FILE` and `LOG_LEVEL` environmental variables).
 - Server-side error detection and exception handling.
@@ -28,7 +28,7 @@ Raw developing speed and ease of use, that's why. `asymmetric` is based on **[St
 - Auto-generated `/docs` and `/redoc` endpoint for your API with **interactive documentation**.
 - Auto-generated [OpenAPI Specification](https://swagger.io/docs/specification/about/) documentation files for your API.
 
-The [complete documentation](https://asymmetric.one/docs/) is available on the [official website](https://asymmetric.one/).
+`asymmetric` is the spiritual successor to [`symmetric`](https://github.com/daleal/symmetric). In fact, **the base API is identical** (you could probably search and replace `symmetric` for `asymmetric` in legacy code), but `asymmetric` uses a more modern underlying technology to achieve better performance and [**some nifty tricks**](#call-me-back). Its internal design is also **significantly** changed, so now REST APIs are fully supported! 🎉
 
 ## Installing
 
@@ -48,7 +48,7 @@ To start a server, choose your favorite `ASGI` server and target the `asymmetric
 uvicorn <module>:asymmetric
 ```
 
-Where `<module>` is your module name (in the examples, we will be writing in a file named `module.py`, so the module name will be just `module`). A `Starlette` instance will be spawned immediately and can be reached at [http://127.0.0.1:8000](http://127.0.0.1:8000) by default. We don't have any endpoints yet, so we'll add some later.
+Where `<module>` is your module name (in the examples, we will be writing in a file named `module.py`, so the module name will be just `module`). A `S` instance will be spawned immediately and can be reached at [http://127.0.0.1:8000](http://127.0.0.1:8000) by default. We don't have any endpoints yet, so we'll add some later.
 
 ### Defining the API endpoints
 
@@ -125,7 +125,7 @@ With this in mind, you can transform any existing project into a usable API very
 
 ## What about `async`?
 
-Given that the underlying framework is `Starlette`, you can use `async` to define your methods, no problem! Here's an example:
+Given that the underlying framework is `S`, you can use `async` to define your methods, no problem! Here's an example:
 
 ```py
 @asymmetric.router("/another-add")
@@ -311,7 +311,10 @@ Run the tests:
 make tests
 ```
 
+## Aknowledgements
+
+This project wouldn't be possible without [Encode](https://github.com/encode), as literally all hard dependencies (`Starlette` and `httpx`) are developed by them. Even `uvicorn` is theirs. Thanks guys! `asymmetric` also takes inspiration from [`FastAPI`](https://github.com/tiangolo/fastapi) on some implementation details, so thank you too for such an awesome project. Finally, thank you! Yes, you! If you are reading this, there is a good chance that you have at least some interest in `asymmetric`. If you have feedback, if you find a bug, if you want to ask for a _feature_ or even if you just want to talk, I'd be glad to hear from you! You're the reason this project exists ♥.
+
 ## Resources
 
-- [Official Website](https://asymmetric.one/)
 - [Issue Tracker](https://github.com/daleal/asymmetric/issues/)
