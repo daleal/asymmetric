@@ -7,15 +7,21 @@ from typing import Any, Callable, Dict, List, Union
 
 from starlette.applications import Starlette
 from starlette.requests import Request
-from starlette.responses import JSONResponse
+from starlette.responses import HTMLResponse, JSONResponse
 from starlette.types import Receive, Scope, Send
 
 from asymmetric.callbacks.core import CallbackClient
-from asymmetric.constants import HTTP_METHODS, OPENAPI_SPEC_ROUTE
+from asymmetric.constants import (
+    HTTP_METHODS,
+    OPENAPI_SPEC_ROUTE,
+    REDOC_DOCUMENTATION_ROUTE,
+    SWAGGER_DOCUMENTATION_ROUTE,
+)
 from asymmetric.endpoints import Endpoints
 from asymmetric.errors import DuplicatedEndpointError
 from asymmetric.helpers import http_verb
 from asymmetric.loggers import log, log_request
+from asymmetric.openapi.documentation_renderers import get_redoc_html, get_swagger_html
 from asymmetric.openapi.utils import get_openapi
 from asymmetric.singleton import AsymmetricSingleton
 from asymmetric.utils import filter_params, generic_call, get_body, handle_error
@@ -60,6 +66,16 @@ class _Asymmetric(metaclass=AsymmetricSingleton):
         @self.router(OPENAPI_SPEC_ROUTE, methods=["get"])
         def openapi_schema() -> Dict[str, Any]:
             return self.openapi
+
+        # Set up the endpoint for the Swagger interactive documentation
+        @self.__app.route(SWAGGER_DOCUMENTATION_ROUTE)
+        def swagger(request: Request) -> HTMLResponse:
+            return get_swagger_html("Asymmetric API")
+
+        # Set up the endpoint for the ReDoc interactive documentation
+        @self.__app.route(REDOC_DOCUMENTATION_ROUTE)
+        def redoc(request: Request) -> HTMLResponse:
+            return get_redoc_html("Asymmetric API")
 
     def router(
         self,

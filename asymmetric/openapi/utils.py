@@ -10,7 +10,7 @@ from asymmetric.callbacks.callback_object import CALLBACK_OBJECT_METADATA
 from asymmetric.callbacks.utils import get_header_finders
 from asymmetric.endpoints import Endpoint
 from asymmetric.openapi.constants import ANY_TYPE
-from asymmetric.openapi.helpers import type_to_string, is_not_docs
+from asymmetric.openapi.helpers import is_not_docs, type_to_string
 
 if TYPE_CHECKING:
     from asymmetric.core import _Asymmetric

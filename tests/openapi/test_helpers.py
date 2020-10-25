@@ -3,7 +3,7 @@ from asymmetric.constants import (
     REDOC_DOCUMENTATION_ROUTE,
     SWAGGER_DOCUMENTATION_ROUTE,
 )
-from asymmetric.openapi.helpers import type_to_string, is_not_docs
+from asymmetric.openapi.helpers import is_not_docs, type_to_string
 
 
 class TestTypeToString:
