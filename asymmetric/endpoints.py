@@ -3,7 +3,7 @@ A module for containing the endpoint logic of asymmetric.
 """
 
 from inspect import getdoc
-from typing import Any, Callable, Dict, List, Optional
+from typing import Any, Callable, Dict, List, Optional, Union
 
 from asymmetric.errors import DuplicatedEndpointError
 
@@ -20,14 +20,14 @@ class Endpoint:
         method: str,
         function: Callable[..., Any],
         decorated_function: Callable[..., Any],
-        callback: bool = False,
+        callback: Union[Dict[str, Any], bool] = False,
         response_code: int = 200,
     ) -> None:
         self.__route: str = route
         self.__method: str = method
         self.__function: Callable[..., Any] = function
         self.__decorated_function: Callable[..., Any] = decorated_function
-        self.__callback: bool = callback
+        self.__callback = callback
         self.__response_code: int = response_code
 
     @property
@@ -46,7 +46,7 @@ class Endpoint:
         return self.__response_code if not self.__callback else 202
 
     @property
-    def callback(self) -> bool:
+    def callback(self) -> Union[Dict[str, Any], bool]:
         """Returns the response code of the endpoint on a request."""
         return self.__callback
 
@@ -77,7 +77,7 @@ class Endpoints:  # pylint: disable=R0903
         methods: List[str],
         function: Callable[..., Any],
         decorated_function: Callable[..., Any],
-        callback: bool = False,
+        callback: Union[Dict[str, Any], bool] = False,
         response_code: int = 200,
     ) -> None:
         """
@@ -99,7 +99,7 @@ class Endpoints:  # pylint: disable=R0903
         method: str,
         function: Callable[..., Any],
         decorated_function: Callable[..., Any],
-        callback: bool = False,
+        callback: Union[Dict[str, Any], bool] = False,
         response_code: int = 200,
     ) -> None:
         """

@@ -93,7 +93,7 @@ class _Asymmetric(metaclass=AsymmetricSingleton):
                     methods,
                     function,  # Save unchanged function
                     wrapper,  # Save starlette decorated function
-                    callback=bool(callback),
+                    callback=callback,
                     response_code=response_code,
                 )
             except DuplicatedEndpointError as error:
