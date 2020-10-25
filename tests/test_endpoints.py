@@ -9,6 +9,10 @@ class TestEndpointClass:
         def function(x, y):
             return x + y
 
+        def docstring_function(x, y):
+            """This is a test docstring!"""
+            return x + y
+
         def decorator(function):
             def wrapper(*args, **kwargs):
                 return function(*args, **kwargs) + 10
@@ -20,6 +24,8 @@ class TestEndpointClass:
         self.response_code = 200
         self.function = function
         self.decorated_function = decorator(function)
+        self.docstring_function = docstring_function
+        self.decorated_docstring_function = decorator(docstring_function)
 
     def test_endpoint_instance_creation(self):
         instance = Endpoint(
@@ -34,8 +40,19 @@ class TestEndpointClass:
         assert instance.route == self.route
         assert instance.method == self.method
         assert instance.function == self.function
+        assert instance.docstring == "No description provided."
         assert instance.callback is False
         assert instance.response_code == self.response_code
+
+    def test_docstring_endpoint_function(self):
+        instance = Endpoint(
+            self.route,
+            self.method,
+            self.docstring_function,
+            self.decorated_docstring_function,
+        )
+
+        assert instance.docstring == "This is a test docstring!"
 
     def test_endpoint_callback_response_code(self):
         instance = Endpoint(

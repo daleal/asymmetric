@@ -2,6 +2,7 @@
 A module for containing the endpoint logic of asymmetric.
 """
 
+from inspect import getdoc
 from typing import Any, Callable, Dict, List, Optional
 
 from asymmetric.errors import DuplicatedEndpointError
@@ -53,6 +54,12 @@ class Endpoint:
     def function(self) -> Callable[..., Any]:
         """Returns the raw function of the endpoint."""
         return self.__function
+
+    @property
+    def docstring(self) -> str:
+        """Returns the docstring content of the endpoint function."""
+        docstring = getdoc(self.__function)
+        return docstring or "No description provided."
 
 
 class Endpoints:  # pylint: disable=R0903
