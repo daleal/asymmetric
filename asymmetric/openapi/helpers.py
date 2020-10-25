@@ -4,12 +4,6 @@ A module for every helper of the OpenAPI documentation generator.
 
 from typing import Any
 
-from asymmetric.constants import (
-    OPENAPI_SPEC_ROUTE,
-    REDOC_DOCUMENTATION_ROUTE,
-    SWAGGER_DOCUMENTATION_ROUTE,
-)
-
 
 def type_to_string(type_obj: Any) -> str:
     """Given a python type, return its JSON schema string counterpart."""

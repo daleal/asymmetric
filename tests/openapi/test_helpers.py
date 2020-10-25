@@ -1,3 +1,5 @@
+from typing import Dict, Union
+
 from asymmetric.constants import (
     OPENAPI_SPEC_ROUTE,
     REDOC_DOCUMENTATION_ROUTE,
@@ -33,4 +35,8 @@ class TestTypeToString:
 
     def test_object_type(self):
         name = type_to_string(object)
+        assert name == "object"
+
+    def test_foreign_type(self):
+        name = type_to_string(Union[Dict[str, str], None])
         assert name == "object"

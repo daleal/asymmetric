@@ -133,6 +133,7 @@ class TestEndpointsClass:
 
         created = self.endpoints._Endpoints__endpoints[self.route][self.methods[0]]
         assert isinstance(created, Endpoint) is True
+        assert created in self.endpoints.endpoints[self.route].values()
 
     def test_add_endpoint_two_different_elements(self):
         self.endpoints._Endpoints__add_endpoint(
