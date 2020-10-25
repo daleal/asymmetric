@@ -11,11 +11,12 @@ from starlette.responses import JSONResponse
 from starlette.types import Receive, Scope, Send
 
 from asymmetric.callbacks.core import CallbackClient
-from asymmetric.constants import HTTP_METHODS
+from asymmetric.constants import HTTP_METHODS, OPENAPI_SPEC_ROUTE
 from asymmetric.endpoints import Endpoints
 from asymmetric.errors import DuplicatedEndpointError
 from asymmetric.helpers import http_verb
 from asymmetric.loggers import log, log_request
+from asymmetric.openapi.utils import get_openapi
 from asymmetric.singleton import AsymmetricSingleton
 from asymmetric.utils import filter_params, generic_call, get_body, handle_error
 
@@ -30,6 +31,8 @@ class _Asymmetric(metaclass=AsymmetricSingleton):
     def __init__(self) -> None:
         self.__app: Starlette = Starlette()
         self.__endpoints: Endpoints = Endpoints()
+        self.__openapi_schema: Union[Dict[str, Any], None] = None
+        self.__setup()
 
     async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
         await self.__app.__call__(scope, receive, send)
@@ -40,6 +43,23 @@ class _Asymmetric(metaclass=AsymmetricSingleton):
         if they aren't part of it and redirect them to the Starlette app.
         """
         return getattr(self.__app, attr)
+
+    @property
+    def openapi(self) -> Dict[str, Any]:
+        """
+        Returns the openapi schema. If it does not exist, it creates it
+        and returns it.
+        """
+        if self.__openapi_schema is None:
+            self.__openapi_schema = get_openapi(self, "Asymmetric API")
+        return self.__openapi_schema
+
+    def __setup(self) -> None:
+        """Sets up the API."""
+        # Set up the endpoint for the openapi json schema
+        @self.router(OPENAPI_SPEC_ROUTE, methods=["get"])
+        def openapi_schema() -> Dict[str, Any]:
+            return self.openapi
 
     def router(
         self,

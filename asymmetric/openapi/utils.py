@@ -10,7 +10,7 @@ from asymmetric.callbacks.callback_object import CALLBACK_OBJECT_METADATA
 from asymmetric.callbacks.utils import get_header_finders
 from asymmetric.endpoints import Endpoint
 from asymmetric.openapi.constants import ANY_TYPE
-from asymmetric.openapi.helpers import type_to_string
+from asymmetric.openapi.helpers import type_to_string, is_not_docs
 
 if TYPE_CHECKING:
     from asymmetric.core import _Asymmetric
@@ -164,7 +164,7 @@ def get_openapi(
     Gets the OpenAPI spec of every endpoint and assembles it into a
     JSON formatted object.
     """
-    endpoints = asymmetric_object.__Asymmetric__endpoints.endpoints
+    endpoints = asymmetric_object._Asymmetric__endpoints.endpoints
     return {
         "openapi": openapi_version,
         "info": {"title": title, "version": version},
@@ -173,6 +173,7 @@ def get_openapi(
             [
                 {route: get_openapi_endpoint_schema(route_dictionary)}
                 for route, route_dictionary in endpoints.items()
+                if is_not_docs(route)
             ],
             {},
         ),
