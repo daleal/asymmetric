@@ -28,6 +28,8 @@ Raw developing speed and ease of use, that's why. `asymmetric` is based on **[St
 - Auto-generated `/docs` and `/redoc` endpoint for your API with **interactive documentation**.
 - Auto-generated [OpenAPI Specification](https://swagger.io/docs/specification/about/) documentation files for your API.
 
+`asymmetric` is the spiritual successor to [`symmetric`](https://github.com/daleal/symmetric). In fact, **the base API is identical** (you could probably search and replace `symmetric` for `asymmetric` in legacy code), but `asymmetric` uses a more modern underlying technology to achieve better performance and [**some nifty tricks**](#call-me-back). Its internal design is also **significantly** changed, so now REST APIs are fully supported! 🎉
+
 ## Installing
 
 Install using pip!
