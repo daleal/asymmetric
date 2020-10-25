@@ -7,7 +7,7 @@ from asymmetric.callbacks.callback_object import (
 )
 from asymmetric.endpoints import Endpoint
 from asymmetric.openapi.constants import ANY_TYPE
-from asymmetric.openapi.utils import (
+from asymmetric.openapi.core import (
     get_defaults_schema,
     get_no_defaults_schema,
     get_openapi_components,
