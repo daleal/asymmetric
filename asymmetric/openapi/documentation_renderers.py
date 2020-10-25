@@ -6,6 +6,7 @@ from asymmetric.constants import OPENAPI_SPEC_ROUTE
 
 
 def get_redoc_html(title: str) -> str:
+    """Gets the HTML template for rendering the ReDoc interactive documentation."""
     redoc_script = "https://cdn.jsdelivr.net/npm/redoc@next/bundles/redoc.standalone.js"
     google_fonts = (
         "https://fonts.googleapis.com/css?family=Montserrat:300,400,700|"
@@ -42,6 +43,7 @@ def get_redoc_html(title: str) -> str:
 
 
 def get_swagger_html(title: str) -> str:
+    """Gets the HTML template for rendering the Swagger interactive documentation."""
     swagger_js_url = (
         "https://cdn.jsdelivr.net/npm/swagger-ui-dist@3.30.0/swagger-ui-bundle.js"
     )

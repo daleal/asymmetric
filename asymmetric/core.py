@@ -63,16 +63,19 @@ class _Asymmetric(metaclass=AsymmetricSingleton):
     def __setup(self) -> None:
         """Sets up the API."""
         # Set up the endpoint for the openapi json schema
+        # pylint: disable=W0612
         @self.__app.route(OPENAPI_SPEC_ROUTE)
         def openapi_schema(request: Request) -> JSONResponse:
             return JSONResponse(self.openapi)
 
         # Set up the endpoint for the Swagger interactive documentation
+        # pylint: disable=W0612
         @self.__app.route(SWAGGER_DOCUMENTATION_ROUTE)
         def swagger(request: Request) -> HTMLResponse:
             return HTMLResponse(get_swagger_html("Asymmetric API"))
 
         # Set up the endpoint for the ReDoc interactive documentation
+        # pylint: disable=W0612
         @self.__app.route(REDOC_DOCUMENTATION_ROUTE)
         def redoc(request: Request) -> HTMLResponse:
             return HTMLResponse(get_redoc_html("Asymmetric API"))

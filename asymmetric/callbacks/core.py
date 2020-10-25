@@ -3,17 +3,14 @@ A module for asymmetric's core callback logic.
 """
 
 import asyncio
-import json
 from typing import Any, Callable, Dict, Optional, Union
 
 import httpx
 from starlette.datastructures import Headers
 from starlette.responses import JSONResponse
 
-from asymmetric.callbacks.callback_object import CALLBACK_OBJECT_DEFAULTS
 from asymmetric.callbacks.utils import (
     get_header_finders,
-    valid_callback_data,
     validate_callback_data,
 )
 from asymmetric.constants import HTTP_METHODS

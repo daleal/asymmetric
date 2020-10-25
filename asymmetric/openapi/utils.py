@@ -137,6 +137,7 @@ def get_openapi_endpoint_schema(route_dict: Dict[str, Endpoint]) -> Dict[str, An
 
 
 def get_openapi_components() -> Dict[str, Any]:
+    """Gets the OpenAPI components."""
     return {
         "responses": {
             "SuccesfulOperation": {
@@ -164,6 +165,7 @@ def get_openapi(
     Gets the OpenAPI spec of every endpoint and assembles it into a
     JSON formatted object.
     """
+    # pylint: disable=W0212
     endpoints = asymmetric_object._Asymmetric__endpoints.endpoints
     return {
         "openapi": openapi_version,
