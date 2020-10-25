@@ -120,8 +120,8 @@ class TestGetHeaderFinders:
         headers = get_header_finders(self.subset_callback)
         assert headers == {
             "callback_url_header": "test_callback_url",
-            "callback_method_header": "asymmetric_callback_method",
-            "custom_callback_key_header": "asymmetric_custom_callback_key",
+            "callback_method_header": "Asymmetric-Callback-Method",
+            "custom_callback_key_header": "Asymmetric-Custom-Callback-Key",
         }
 
     def test_complete_callback_header_finders(self):
@@ -145,5 +145,5 @@ class TestGetHeaderFinders:
         assert headers == {
             "callback_url_header": "test_callback_url",
             "callback_method_header": "test_callback_method",
-            "custom_callback_key_header": "asymmetric_custom_callback_key",
+            "custom_callback_key_header": "Asymmetric-Custom-Callback-Key",
         }

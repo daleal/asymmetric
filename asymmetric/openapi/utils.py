@@ -4,8 +4,10 @@ Module to hold the openapi documentation creation utilities.
 
 import functools
 from inspect import FullArgSpec, getfullargspec
-from typing import Any, Dict
+from typing import Any, Dict, List
 
+from asymmetric.callbacks.callback_object import CALLBACK_OBJECT_METADATA
+from asymmetric.callbacks.utils import get_header_finders
 from asymmetric.endpoints import Endpoint
 from asymmetric.openapi.constants import ANY_TYPE
 from asymmetric.openapi.helpers import type_to_string
@@ -67,6 +69,25 @@ def get_openapi_endpoint_body_schema(endpoint: Endpoint) -> Dict[str, Any]:
         "properties": {**no_defaults_schema, **defaults_schema},
         "additionalProperties": params.varkw is not None,
     }
+
+
+def get_openapi_endpoint_headers_schema(endpoint: Endpoint) -> List[Dict[str, Any]]:
+    """Assembles the OpenAPI schema for the endpoint headers."""
+    if not endpoint.callback:
+        return []
+    header_data = get_header_finders(endpoint.callback)
+    return [
+        {
+            "in": "header",
+            "name": header,
+            "schema": {
+                "type": "string",
+            },
+            "required": CALLBACK_OBJECT_METADATA[key]["required"],
+            "description": CALLBACK_OBJECT_METADATA[key]["description"],
+        }
+        for key, header in header_data.items()
+    ]
 
 
 def get_openapi_endpoint_responses_schema(endpoint: Endpoint) -> Dict[str, Any]:

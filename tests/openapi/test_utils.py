@@ -1,12 +1,17 @@
 import json
 from inspect import getfullargspec
 
+from asymmetric.callbacks.callback_object import (
+    CALLBACK_OBJECT_DEFAULTS,
+    CALLBACK_OBJECT_METADATA,
+)
 from asymmetric.endpoints import Endpoint
 from asymmetric.openapi.constants import ANY_TYPE
 from asymmetric.openapi.utils import (
     get_defaults_schema,
     get_no_defaults_schema,
     get_openapi_endpoint_body_schema,
+    get_openapi_endpoint_headers_schema,
     get_openapi_endpoint_responses_schema,
     get_parameters_amount,
 )
@@ -255,6 +260,50 @@ class TestGetOpenAPIBodySchema:
         assert schema == self.kwargs_schema
 
 
+class TestGetOpenAPIEndpointHeadersSchema:
+    def setup_method(self):
+        def function(x):
+            return x
+
+        def decorator(function):
+            def wrapper():
+                print("wrapping...")
+                function()
+                print("unwrapping...")
+            return wrapper
+
+        def create_endpoint(callback):
+            return Endpoint(
+                "/v1/test/open/api",
+                "GET",
+                function,
+                decorator(function),
+                callback=callback,
+            )
+
+        self.no_callback_endpoint = create_endpoint(False)
+        self.callback_endpoint = create_endpoint(True)
+
+    def test_no_callback_endpoint_headers_schema(self):
+        schema = get_openapi_endpoint_headers_schema(self.no_callback_endpoint)
+        assert schema == []
+
+    def test_callback_endpoint_headers_schema(self):
+        schema = get_openapi_endpoint_headers_schema(self.callback_endpoint)
+        assert schema == [
+            {
+                "in": "header",
+                "name": header,
+                "schema": {
+                    "type": "string",
+                },
+                "required": CALLBACK_OBJECT_METADATA[key]["required"],
+                "description": CALLBACK_OBJECT_METADATA[key]["description"],
+            }
+            for key, header in CALLBACK_OBJECT_DEFAULTS.items()
+        ]
+
+
 class TestGetOpenAPIEndpointResponsesSchema:
     def setup_method(self):
         def no_response_annotation(x):
@@ -268,7 +317,6 @@ class TestGetOpenAPIEndpointResponsesSchema:
                 print("wrapping...")
                 function()
                 print("unwrapping...")
-
             return wrapper
 
         def create_endpoint(function, callback):
