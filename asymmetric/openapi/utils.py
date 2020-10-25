@@ -4,14 +4,16 @@ Module to hold the openapi documentation creation utilities.
 
 import functools
 from inspect import FullArgSpec, getfullargspec
-from typing import Any, Dict, List
+from typing import TYPE_CHECKING, Any, Dict, List
 
 from asymmetric.callbacks.callback_object import CALLBACK_OBJECT_METADATA
 from asymmetric.callbacks.utils import get_header_finders
-from asymmetric.core import _Asymmetric
 from asymmetric.endpoints import Endpoint
 from asymmetric.openapi.constants import ANY_TYPE
 from asymmetric.openapi.helpers import type_to_string
+
+if TYPE_CHECKING:
+    from asymmetric.core import _Asymmetric
 
 
 def get_parameters_amount(params: FullArgSpec) -> Dict[str, int]:
@@ -153,7 +155,7 @@ def get_openapi_components() -> Dict[str, Any]:
 
 
 def get_openapi(
-    asymmetric_object: _Asymmetric,
+    asymmetric_object: "_Asymmetric",
     title: str,
     version: str = "0.0.1",
     openapi_version: str = "3.0.3",
