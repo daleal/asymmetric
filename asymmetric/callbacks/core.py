@@ -9,10 +9,7 @@ import httpx
 from starlette.datastructures import Headers
 from starlette.responses import JSONResponse
 
-from asymmetric.callbacks.utils import (
-    get_header_finders,
-    validate_callback_data,
-)
+from asymmetric.callbacks.utils import get_header_finders, validate_callback_data
 from asymmetric.constants import HTTP_METHODS
 from asymmetric.errors import InvalidCallbackHeadersError, InvalidCallbackObjectError
 from asymmetric.loggers import log
