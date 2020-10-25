@@ -1,10 +1,11 @@
 import json
 import logging
+import os
 
 import pytest
 from starlette.requests import Request
 
-from asymmetric.loggers import log, log_request, log_request_body
+from asymmetric.loggers import configure_loggers, log, log_request, log_request_body
 
 
 class TestLog:
@@ -32,6 +33,21 @@ class TestLog:
     def test_critical_log(self, caplog):
         self.valid_log_helper(caplog, "critical")
 
+    def test_debug_file_log(self, tmpdir):
+        self.valid_file_log_helper(tmpdir, "debug")
+
+    def test_info_file_log(self, tmpdir):
+        self.valid_file_log_helper(tmpdir, "info")
+
+    def test_warning_file_log(self, tmpdir):
+        self.valid_file_log_helper(tmpdir, "warning")
+
+    def test_error_file_log(self, tmpdir):
+        self.valid_file_log_helper(tmpdir, "error")
+
+    def test_critical_file_log(self, tmpdir):
+        self.valid_file_log_helper(tmpdir, "critical")
+
     def test_invalid_debug_log(self, caplog):
         self.invalid_log_helper(caplog, "debug")
 
@@ -48,6 +64,16 @@ class TestLog:
         text = self.log_helper(caplog, level, level)
         assert "[[asymmetric]]" in text
         assert level in text
+
+    def valid_file_log_helper(self, tmpdir, level):
+        output_file = tmpdir.join("tests.log")
+        os.environ["LOG_FILE"] = output_file.strpath
+        os.environ["LOG_LEVEL"] = level.upper()
+        configure_loggers()
+        log(self.messages[level], level=level)
+        file_content = output_file.read()
+        assert "[[asymmetric]]" in file_content
+        assert level in file_content
 
     def invalid_log_helper(self, caplog, level):
         text = self.log_helper(caplog, level, "critical")

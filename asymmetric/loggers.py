@@ -12,40 +12,45 @@ from starlette.requests import Request
 
 from asymmetric.utils import get_body
 
-# Logging configuration
-configuration: Dict[str, Any] = {
-    "version": 1,
-    "formatters": {
-        "console": {"format": "[%(asctime)s] [%(levelname)s] %(module)s: %(message)s"},
-        "file": {
-            "format": (
-                "[%(asctime)s] [%(levelname)s] %(pathname)s - "
-                "line %(lineno)d: \n%(message)s\n"
-            )
-        },
-    },
-    "handlers": {
-        "console": {
-            "class": "logging.StreamHandler",
-            "stream": "ext://sys.stderr",
-            "formatter": "console",
-        },
-    },
-    "root": {
-        "level": os.getenv("LOG_LEVEL", "WARNING"),
-        "handlers": ["console"],
-    },
-}
 
-if os.getenv("LOG_FILE") is not None:
-    configuration["handlers"]["file"] = {
-        "class": "logging.FileHandler",
-        "filename": os.getenv("LOG_FILE"),
-        "formatter": "file",
+def configure_loggers() -> None:
+    """Configures the loggers."""
+    # Logging configuration
+    configuration: Dict[str, Any] = {
+        "version": 1,
+        "formatters": {
+            "console": {
+                "format": "[%(asctime)s] [%(levelname)s] %(module)s: %(message)s"
+            },
+            "file": {
+                "format": (
+                    "[%(asctime)s] [%(levelname)s] %(pathname)s - "
+                    "line %(lineno)d: \n%(message)s\n"
+                )
+            },
+        },
+        "handlers": {
+            "console": {
+                "class": "logging.StreamHandler",
+                "stream": "ext://sys.stderr",
+                "formatter": "console",
+            },
+        },
+        "root": {
+            "level": os.getenv("LOG_LEVEL", "WARNING"),
+            "handlers": ["console"],
+        },
     }
-    configuration["root"]["handlers"].append("file")
 
-logging.config.dictConfig(configuration)
+    if os.getenv("LOG_FILE") is not None:
+        configuration["handlers"]["file"] = {
+            "class": "logging.FileHandler",
+            "filename": os.getenv("LOG_FILE"),
+            "formatter": "file",
+        }
+        configuration["root"]["handlers"].append("file")
+
+    logging.config.dictConfig(configuration)
 
 
 def log(message: str, level: str = "info") -> None:
@@ -79,3 +84,6 @@ def log_request_body(body: Dict[str, Any]) -> None:
         "Request Body:\n"
         + json.dumps(body, indent=2, sort_keys=False, ensure_ascii=False)
     )
+
+
+configure_loggers()

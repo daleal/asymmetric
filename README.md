@@ -26,7 +26,7 @@ Raw developing speed and ease of use, that's why. `asymmetric` is based on **[St
 - Server-side error detection and exception handling.
 - **Asynchronous callback endpoints** to make a request, terminate the request **immediately** and then have the server make a request to a _callback_ endpoint with the results! ✨
 - Auto-generated `/docs` and `/redoc` endpoint for your API with **interactive documentation**.
-- Auto-generated [OpenAPI Specification](https://swagger.io/docs/specification/about/) documentation files for your API (**for now**, only accessible through a `GET` to `/openapi.json`).
+- Auto-generated [OpenAPI Specification](https://swagger.io/docs/specification/about/) documentation files for your API.
 
 The [complete documentation](https://asymmetric.one/docs/) is available on the [official website](https://asymmetric.one/).
 
@@ -269,6 +269,14 @@ If no `HTTP` method is specified, the server will `POST` the information to the 
 By default, you can `GET` the `/docs` or the `/redoc` endpoints (using a browser) to access to **interactive auto-generated documentation** about your API. It will include request bodies for each endpoint, response codes, headers required, default values, and much more!
 
 **Tip**: Given that the [ReDoc Documentation](https://github.com/Redocly/redoc) and the [SwaggerUI Documentation](https://swagger.io/tools/swagger-ui/) are based on the OpenAPI standard, using **type annotations** in your code will result in a more detailed interactive documentation. Instead of the parameters being allowed to be any type, they will be forced into the type declared in your code. Cool, right?
+
+You can also get a `json` file containing the OpenAPI spec of your API by running the following command:
+
+```sh
+asymmetric docs module
+```
+
+You can also use the flag `--filename` to specify the name of the output file. It defaults to `openapi.json`.
 
 ## To Do
 

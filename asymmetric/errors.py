@@ -19,3 +19,10 @@ class InvalidCallbackHeadersError(Exception):
     """
     Exception for when the callback headers are incorrect.
     """
+
+
+class AppImportError(Exception):
+    """
+    Exception for when there's an error finding the asymmetric object inside
+    the specified module.
+    """

@@ -1,4 +1,4 @@
-from asymmetric.openapi.documentation_renderers import get_redoc_html, get_swagger_html
+from asymmetric.openapi.docs import get_redoc_html, get_swagger_html
 
 
 class TestGetReDocHTML:
