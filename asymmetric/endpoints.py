@@ -71,6 +71,11 @@ class Endpoints:  # pylint: disable=R0903
     def __init__(self) -> None:
         self.__endpoints: Dict[str, Dict[str, Endpoint]] = {}
 
+    @property
+    def endpoints(self) -> Dict[str, Dict[str, Endpoint]]:
+        """Returns the endpoints dict."""
+        return self.__endpoints
+
     def add_endpoints(
         self,
         route: str,

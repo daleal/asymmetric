@@ -10,6 +10,7 @@ from asymmetric.openapi.constants import ANY_TYPE
 from asymmetric.openapi.utils import (
     get_defaults_schema,
     get_no_defaults_schema,
+    get_openapi_components,
     get_openapi_endpoint_body_schema,
     get_openapi_endpoint_headers_schema,
     get_openapi_endpoint_responses_schema,
@@ -319,6 +320,7 @@ class TestGetOpenAPIEndpointResponsesSchema:
                 print("wrapping...")
                 function()
                 print("unwrapping...")
+
             return wrapper
 
         def create_endpoint(function, callback):
@@ -424,6 +426,7 @@ class TestGetOpenAPIEndpointSchema:
                 print("wrapping...")
                 function()
                 print("unwrapping...")
+
             return wrapper
 
         def create_endpoint(function, method, callback):
@@ -553,3 +556,12 @@ class TestGetOpenAPIEndpointSchema:
                 },
             },
         }
+
+
+class TestGetOpenAPIComponents:
+    def test_get_openapi_components(self):
+        components = get_openapi_components()
+        assert "responses" in components
+        assert "SuccesfulOperation" in components["responses"]
+        assert "AcceptedOperation" in components["responses"]
+        assert "InternalError" in components["responses"]

@@ -8,6 +8,7 @@ from typing import Any, Dict, List
 
 from asymmetric.callbacks.callback_object import CALLBACK_OBJECT_METADATA
 from asymmetric.callbacks.utils import get_header_finders
+from asymmetric.core import _Asymmetric
 from asymmetric.endpoints import Endpoint
 from asymmetric.openapi.constants import ANY_TYPE
 from asymmetric.openapi.helpers import type_to_string
@@ -133,44 +134,45 @@ def get_openapi_endpoint_schema(route_dict: Dict[str, Endpoint]) -> Dict[str, An
     return route_schema
 
 
-# def get_openapi(sym_obj, title, version="0.0.1", openapi_version="3.0.3"):
-#     """
-#     Gets the OpenAPI spec of every endpoint and assembles it into a
-#     JSON formatted object.
-#     """
-#     return {
-#         "openapi": openapi_version,
-#         "info": {
-#             "title": title,
-#             "version": version
-#         },
-#         "paths": functools.reduce(
-#             lambda x, y: {**x, **y},
-#             [get_openapi_endpoint(endpoint) for endpoint in sym_obj.endpoints
-#                 if symmetric.openapi.helpers.is_not_docs(endpoint.route)],
-#             {}
-#         ),
-#         "components": {
-#             "securitySchemes": {
-#                 "APIKeyAuth": {
-#                     "type": "apiKey",
-#                     "in": "header",
-#                     "name": sym_obj.client_token_name
-#                 }
-#             },
-#             "responses": {
-#                 "SuccesfulOperation": {
-#                     "description": "Successful operation"
-#                 },
-#                 "UnauthorizedError": {
-#                     "description": "Invalid or non-existent authentication "
-#                                    "credentials."
-#                 },
-#                 "InternalError": {
-#                     "description": "Unexpected internal error (API method "
-#                                    "failed, probably due to a missuse of the "
-#                                    "underlying function)."
-#                 }
-#             }
-#         }
-#     }
+def get_openapi_components() -> Dict[str, Any]:
+    return {
+        "responses": {
+            "SuccesfulOperation": {
+                "description": "Operation completed successfully",
+            },
+            "AcceptedOperation": {
+                "description": "Operation delegated successfully",
+            },
+            "InternalError": {
+                "description": "Unexpected internal error (API method "
+                "failed, probably due to a missuse of the "
+                "underlying function)",
+            },
+        },
+    }
+
+
+def get_openapi(
+    asymmetric_object: _Asymmetric,
+    title: str,
+    version: str = "0.0.1",
+    openapi_version: str = "3.0.3",
+) -> Dict[str, Any]:
+    """
+    Gets the OpenAPI spec of every endpoint and assembles it into a
+    JSON formatted object.
+    """
+    endpoints = asymmetric_object.__Asymmetric__endpoints.endpoints
+    return {
+        "openapi": openapi_version,
+        "info": {"title": title, "version": version},
+        "paths": functools.reduce(
+            lambda x, y: {**x, **y},
+            [
+                {route: get_openapi_endpoint_schema(route_dictionary)}
+                for route, route_dictionary in endpoints.items()
+            ],
+            {},
+        ),
+        "components": get_openapi_components(),
+    }
