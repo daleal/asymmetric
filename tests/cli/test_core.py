@@ -1,5 +1,6 @@
-import pytest
 from argparse import ArgumentParser
+
+import pytest
 
 import asymmetric
 from asymmetric.cli.core import (
@@ -37,7 +38,7 @@ class TestDispatcher:
         assert asymmetric.__version__ in captured
 
     def test_docs_generation(self, tmpdir):
-        output_file = tmpdir.join('openapi.json')
+        output_file = tmpdir.join("openapi.json")
         dispatcher(["docs", "--filename", output_file.strpath, "asymmetric"])
         content = output_file.read()
         print(content)

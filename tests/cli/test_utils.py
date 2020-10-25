@@ -41,7 +41,7 @@ class TestGetAsymmetricObject:
 
 class TestDocumentOpenAPI:
     def test_file_output(self, tmpdir):
-        output_file = tmpdir.join('openapi.json')
+        output_file = tmpdir.join("openapi.json")
         document_openapi("asymmetric", output_file.strpath)
         content = output_file.read()
         assert "openapi" in content
