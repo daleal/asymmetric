@@ -91,7 +91,7 @@ class CallbackClient:
         callback: Union[Dict[str, Any], bool]
     ) -> Dict[str, str]:
         """
-        Collects the callback data finders and validates
+        Collects and returns the callback data finders and validates
         that they are correct on decoration-time.
         """
         try:
