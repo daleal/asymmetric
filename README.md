@@ -28,8 +28,6 @@ Raw developing speed and ease of use, that's why. `asymmetric` is based on **[St
 - Auto-generated `/docs` and `/redoc` endpoint for your API with **interactive documentation**.
 - Auto-generated [OpenAPI Specification](https://swagger.io/docs/specification/about/) documentation files for your API.
 
-The [complete documentation](https://asymmetric.one/docs/) is available on the [official website](https://asymmetric.one/).
-
 ## Installing
 
 Install using pip!
@@ -313,5 +311,4 @@ make tests
 
 ## Resources
 
-- [Official Website](https://asymmetric.one/)
 - [Issue Tracker](https://github.com/daleal/asymmetric/issues/)
