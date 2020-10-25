@@ -62,7 +62,6 @@ class _Asymmetric(metaclass=AsymmetricSingleton):
 
             if callback:
                 callback_client = CallbackClient(function, callback)
-                callback_client.prepare_and_validate_finders()
 
             @self.__app.route(route, methods=methods)
             async def wrapper(request: Request) -> JSONResponse:

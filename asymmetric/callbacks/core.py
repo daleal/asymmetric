@@ -11,7 +11,11 @@ from starlette.datastructures import Headers
 from starlette.responses import JSONResponse
 
 from asymmetric.callbacks.callback_object import CALLBACK_OBJECT_DEFAULTS
-from asymmetric.callbacks.utils import valid_callback_data
+from asymmetric.callbacks.utils import (
+    get_header_finders,
+    valid_callback_data,
+    validate_callback_data,
+)
 from asymmetric.constants import HTTP_METHODS
 from asymmetric.errors import InvalidCallbackHeadersError, InvalidCallbackObjectError
 from asymmetric.loggers import log
@@ -28,8 +32,7 @@ class CallbackClient:
         self, function: Callable[..., Any], callback: Union[Dict[str, Any], bool]
     ) -> None:
         self.__function = function
-        self.__callback = callback
-        self.__attribute_finders: Dict[str, str] = {}
+        self.__attribute_finders = self.__prepare_and_validate_finders(callback)
         self.__headers = Headers()
         self.__params: Dict[str, str] = {}
         self.__invalid_callback_object = ""
@@ -83,46 +86,20 @@ class CallbackClient:
         except InvalidCallbackHeadersError as error:
             return JSONResponse({"message": str(error)}, status_code=422)
 
-    def prepare_and_validate_finders(self) -> None:
+    @staticmethod
+    def __prepare_and_validate_finders(
+        callback: Union[Dict[str, Any], bool]
+    ) -> Dict[str, str]:
         """
         Collects the callback data finders and validates
         that they are correct on decoration-time.
         """
         try:
-            self.__validate_callback_json_data()
-            self.__get_header_finders()
+            validate_callback_data(callback)
+            return get_header_finders(callback)
         except InvalidCallbackObjectError as error:
             log(str(error), level="critical")
             raise InvalidCallbackObjectError(error) from error
-
-    def __validate_callback_json_data(self) -> None:
-        """
-        Validates that the callback dictionary is a valid callback
-        dictionary or raises an error.
-        """
-        if not valid_callback_data(self.__callback):
-            raise InvalidCallbackObjectError(
-                "Invalid callback object:\n"
-                + json.dumps(
-                    self.__callback, indent=2, sort_keys=False, ensure_ascii=False
-                )
-            )
-
-    def __get_header_finders(self) -> None:
-        """
-        Gets the header attribute finders to search for some data
-        on every request header on decoration-time.
-        """
-        if isinstance(self.__callback, bool):
-            # Callback attribute is True
-            self.__attribute_finders = CALLBACK_OBJECT_DEFAULTS
-        else:
-            # Callback attribute is an object, get callback attribute finders
-            for attr, default_value in CALLBACK_OBJECT_DEFAULTS.items():
-                if attr in self.__callback:
-                    self.__attribute_finders[attr] = self.__callback[attr]
-                else:
-                    self.__attribute_finders[attr] = default_value
 
     def __validate_callback_url(self) -> None:
         """
