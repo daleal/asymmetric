@@ -4,22 +4,23 @@ A module to route the CLI traffic.
 
 import sys
 from argparse import ArgumentParser, _SubParsersAction
+from typing import Any
 
 import asymmetric
 from asymmetric.cli.utils import document_openapi
 
 
-def dispatcher() -> None:
+def dispatcher(*args: Any, **kwargs: Any) -> None:
     """
     Main CLI method, recieves the command line action and dispatches it to
     the corresponding method.
     """
     parser = generate_parser()
-    args = parser.parse_args()
+    parsed_args = parser.parse_args(*args, **kwargs)
 
     try:
-        if args.action == "docs":
-            document_openapi(args.module, args.filename)
+        if parsed_args.action == "docs":
+            document_openapi(parsed_args.module, parsed_args.filename)
     except AttributeError:
         print("An argument is required for the asymmetric command.")
         parser.print_help()
