@@ -13,3 +13,8 @@ HTTP_METHODS = [
     "patch",
     "trace",
 ]
+
+# Docs
+OPENAPI_SPEC_ROUTE = "/openapi.json"
+SWAGGER_DOCUMENTATION_ROUTE = "/docs"
+REDOC_DOCUMENTATION_ROUTE = "/redoc"
