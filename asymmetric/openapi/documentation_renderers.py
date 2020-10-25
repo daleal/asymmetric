@@ -2,13 +2,10 @@
 A module for the interactive documentation renderers.
 """
 
-from starlette.requests import Request
-from starlette.responses import HTMLResponse
-
 from asymmetric.constants import OPENAPI_SPEC_ROUTE
 
 
-def get_redoc_html(title: str) -> HTMLResponse:
+def get_redoc_html(title: str) -> str:
     redoc_script = "https://cdn.jsdelivr.net/npm/redoc@next/bundles/redoc.standalone.js"
     google_fonts = (
         "https://fonts.googleapis.com/css?family=Montserrat:300,400,700|"
@@ -41,10 +38,10 @@ def get_redoc_html(title: str) -> HTMLResponse:
         </body>
     </html>
     """
-    return HTMLResponse(html)
+    return html
 
 
-def get_swagger_html(title: str) -> HTMLResponse:
+def get_swagger_html(title: str) -> str:
     swagger_js_url = (
         "https://cdn.jsdelivr.net/npm/swagger-ui-dist@3.30.0/swagger-ui-bundle.js"
     )
@@ -80,4 +77,4 @@ def get_swagger_html(title: str) -> HTMLResponse:
         </body>
     </html>
     """
-    return HTMLResponse(html)
+    return html

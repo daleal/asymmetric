@@ -70,12 +70,12 @@ class _Asymmetric(metaclass=AsymmetricSingleton):
         # Set up the endpoint for the Swagger interactive documentation
         @self.__app.route(SWAGGER_DOCUMENTATION_ROUTE)
         def swagger(request: Request) -> HTMLResponse:
-            return get_swagger_html("Asymmetric API")
+            return HTMLResponse(get_swagger_html("Asymmetric API"))
 
         # Set up the endpoint for the ReDoc interactive documentation
         @self.__app.route(REDOC_DOCUMENTATION_ROUTE)
         def redoc(request: Request) -> HTMLResponse:
-            return get_redoc_html("Asymmetric API")
+            return HTMLResponse(get_redoc_html("Asymmetric API"))
 
     def router(
         self,
