@@ -9,3 +9,11 @@ def http_verb(dirty: str) -> str:
     it and returns it lowercased.
     """
     return dirty.strip().lower()
+
+
+def humanize(module_name: str) -> str:
+    """Transforms a module name into a pretty human-likable string."""
+    module_name = module_name.lower()
+    module_name = module_name.replace("_", " ").replace("-", " ")
+    module_name = module_name.title()
+    return module_name

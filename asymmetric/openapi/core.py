@@ -12,7 +12,7 @@ from asymmetric.endpoints import Endpoint
 from asymmetric.openapi.constants import ANY_TYPE
 from asymmetric.openapi.helpers import type_to_string
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: nocover
     from asymmetric.core import _Asymmetric
 
 
