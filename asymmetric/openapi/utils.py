@@ -55,3 +55,15 @@ def get_defaults_schema(params: FullArgSpec) -> Dict[str, Any]:
         )
         schema[param] = {param_label: param_type, "default": default_value}
     return schema
+
+
+def get_openapi_endpoint_body_schema(endpoint: Endpoint) -> Dict[str, Any]:
+    """Assembles the JSON schema for the endpoint body."""
+    params = getfullargspec(endpoint.function)
+    no_defaults_schema = get_no_defaults_schema(params)
+    defaults_schema = get_defaults_schema(params)
+    return {
+        "type": "object",
+        "properties": {**no_defaults_schema, **defaults_schema},
+        "additionalProperties": params.varkw is not None,
+    }
