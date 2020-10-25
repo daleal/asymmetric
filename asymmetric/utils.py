@@ -4,7 +4,6 @@ A module for every utility of asymmetric.
 
 import inspect
 import json
-import sys
 from typing import Any, Callable, Dict
 
 from starlette.requests import Request
@@ -74,8 +73,3 @@ def valid_plain_dict(data: Dict[str, Any], validator: Dict[str, Any]) -> bool:
         return False
 
     return True
-
-
-def terminate_program() -> None:
-    """Terminates the server process."""
-    sys.exit(1)

@@ -1,21 +1,32 @@
 # Asymmetric
 
-![PyPI - Version](https://img.shields.io/pypi/v/asymmetric?style=for-the-badge&logo=python&color=306998&logoColor=%23fff&label=version)
+<a href="https://pypi.org/project/asymmetric" target="_blank">
+    <img src="https://img.shields.io/pypi/v/asymmetric?label=version&logo=python&logoColor=%23fff&color=306998&style=for-the-badge" alt="PyPI - Version">
+</a>
 
 _The async framework that calls you back_! ✨ Enable ridiculously fast and easy module-to-**[API](https://en.wikipedia.org/wiki/Web_API)** transformations. Learn in minutes, implement in seconds.
 
-![Tests Coverage](https://img.shields.io/codecov/c/gh/daleal/asymmetric?color=%2344cc11&label=coverage&logo=codecov&logoColor=ffffff&style=for-the-badge)
-![Linters](https://img.shields.io/github/workflow/status/daleal/asymmetric/linters?label=linters&logo=github&style=for-the-badge)
+<a href="https://github.com/daleal/asymmetric/actions?query=workflow%3Atests" target="_blank">
+    <img src="https://img.shields.io/github/workflow/status/daleal/asymmetric/tests?label=tests&logo=python&logoColor=%23fff&style=for-the-badge" alt="Tests">
+</a>
+
+<a href="https://codecov.io/gh/daleal/asymmetric" target="_blank">
+    <img src="https://img.shields.io/codecov/c/gh/daleal/asymmetric?label=coverage&logo=codecov&logoColor=ffffff&style=for-the-badge" alt="Coverage">
+</a>
+
+<a href="https://github.com/daleal/asymmetric/actions?query=workflow%3Alinters" target="_blank">
+    <img src="https://img.shields.io/github/workflow/status/daleal/asymmetric/linters?label=linters&logo=github&style=for-the-badge" alt="Linters">
+</a>
 
 ## Why Asymmetric?
 
 Raw developing speed and ease of use, that's why. `asymmetric` is based on **[Starlette](https://github.com/encode/starlette)** ✨! While `Starlette` is a powerful tool to have, getting it to work from scratch can be a bit of a pain, especially if you have never used it before. The idea behind `asymmetric` is to be able to take any module **already written** and transform it into a working API in a matter of minutes, instead of having to design the module ground-up to work with `Starlette` (it can also be used to build an API from scratch really fast). With `asymmetric`, you will also get some neat features, namely:
 
-- Auto logging.
+- Auto logging (configure logs with the `LOG_FILE` and `LOG_LEVEL` environmental variables).
 - Server-side error detection and exception handling.
 - **Asynchronous callback endpoints** to make a request, terminate the request **immediately** and then have the server make a request to a _callback_ endpoint with the results! ✨
-- ~~Auto-generated `/docs` endpoint for your API with **interactive documentation**.~~ **[UNDER CONSTRUCTION]**
-- ~~Auto-generated [OpenAPI Specification](https://swagger.io/docs/specification/about/) documentation files for your API.~~ **[UNDER CONSTRUCTION]**
+- Auto-generated `/docs` and `/redoc` endpoint for your API with **interactive documentation**.
+- Auto-generated [OpenAPI Specification](https://swagger.io/docs/specification/about/) documentation files for your API (**for now**, only accessible through a `GET` to `/openapi.json`).
 
 The [complete documentation](https://asymmetric.one/docs/) is available on the [official website](https://asymmetric.one/).
 
@@ -171,8 +182,8 @@ response = httpx.post(
     "http://127.0.0.1:8000/predict",
     json={"data": mydata},
     headers={
-        "asymmetric_callback_url": "http://callback.url/receive/predictions",
-        "asymmetric_callback_method": "post",
+        "Asymmetric-Callback-URL": "http://callback.url/receive/predictions",
+        "Asymmetric-Callback-Method": "post",
     }
 )
 
@@ -188,9 +199,9 @@ response = httpx.post(
     "http://127.0.0.1:8000/predict",
     json={"data": mydata},
     headers={
-        "asymmetric_callback_url": "http://callback.url/receive/predictions",
-        "asymmetric_callback_method": "post",
-        "asymmetric_custom_callback_key": "predictions",
+        "Asymmetric-Callback-URL": "http://callback.url/receive/predictions",
+        "Asymmetric-Callback-Method": "post",
+        "Asymmetric-Custom-Callback-Key": "predictions",
     }
 )
 
@@ -201,9 +212,9 @@ That will send a `json` with one element, with `predictions` as a key and the re
 
 ```python
 callback_parameters = {
-    "callback_url_header": "send_me_here",
-    "callback_method_header": "use_me",
-    "custom_callback_key_header": "put_me_in_here",
+    "callback_url_header": "Send-Me-Here",
+    "callback_method_header": "Use-Me",
+    "custom_callback_key_header": "Put-Me-In-Here",
 }
 
 @asymmetric.router("/predict", callback=callback_parameters)
@@ -223,49 +234,45 @@ response = httpx.post(
     "http://127.0.0.1:8000/predict",
     json={"data": mydata},
     headers={
-        "send_me_here": "http://callback.url/receive/predictions",
-        "use_me": "post",
-        "put_me_in_here": "predictions",
+        "Send-Me-Here": "http://callback.url/receive/predictions",
+        "Use-Me": "post",
+        "Put-Me-In-Here": "predictions",
     }
 )
 
 print(response)
 ```
 
-As you probably imagine by now, the `callback` parameter can be a boolean or a dictionary with the following schema:
+As you probably imagine by now, the `callback` parameter can be a boolean or a dictionary with the following _pseudo-schema_:
 
-```json
+```python
 {
-    "type": "object",
-    "properties": {
-        "callback_url_header": {
-            "type": "string"
-        },
-        "callback_method_header": {
-            "type": "string"
-        },
-        "custom_callback_key_header": {
-            "type": "string"
-        }
-    }
+    "callback_url_header": {
+        "required": False,
+        "type": str,
+    },
+    "callback_method_header": {
+        "required": False,
+        "type": str,
+    },
+    "custom_callback_key_header": {
+        "required": False,
+        "type": str,
+    },
 }
 ```
 
 If no `HTTP` method is specified, the server will `POST` the information to the callback `URL`.
 
-## ~~ReDoc Documentation~~
+## ReDoc/Swagger Documentation
 
-**[UNDER CONSTRUCTION]**
+By default, you can `GET` the `/docs` or the `/redoc` endpoints (using a browser) to access to **interactive auto-generated documentation** about your API. It will include request bodies for each endpoint, response codes, headers required, default values, and much more!
 
-By default, you can `GET` the `/docs` endpoint (using a browser) to access to **interactive auto-generated documentation** about your API. It will include request bodies for each endpoint, response codes, authentication required, default values, and much more!
-
-**Tip**: Given that the [ReDoc Documentation](https://github.com/Redocly/redoc) is based on the OpenAPI standard, using **type annotations** in your code will result in a more detailed interactive documentation. Instead of the parameters being allowed to be any type, they will be forced into the type declared in your code. Cool, right?
+**Tip**: Given that the [ReDoc Documentation](https://github.com/Redocly/redoc) and the [SwaggerUI Documentation](https://swagger.io/tools/swagger-ui/) are based on the OpenAPI standard, using **type annotations** in your code will result in a more detailed interactive documentation. Instead of the parameters being allowed to be any type, they will be forced into the type declared in your code. Cool, right?
 
 ## To Do
 
-- _Automagic_ OpenAPI spec isn't being generated rigth now, so that's missing from the library. It will soon be added, though, as it is a very useful _feature_.
 - Parse callback `URL`s to make sure that they are valid `URL`s, and fail if they aren't.
-- On some initialization errors, the server should stop to _avoid avoidable errors_. Right now, the method to stop the server really does nothing, so that's something that should be addressed in the near future.
 
 ## Developing
 
@@ -282,6 +289,18 @@ Recreate environment:
 ```sh
 make get-poetry
 make venv-with-dependencies
+```
+
+Run the linters:
+
+```sh
+make linters
+```
+
+Run the tests:
+
+```sh
+make tests
 ```
 
 ## Resources
