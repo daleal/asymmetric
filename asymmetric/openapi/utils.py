@@ -86,3 +86,68 @@ def get_openapi_endpoint_responses_schema(endpoint: Endpoint) -> Dict[str, Any]:
             }
         }
     return responses
+
+
+# def get_openapi_endpoint_schema(route_dict: Dict[str, Endpoint]) -> Dict[str, Any]:
+#     """
+#     Generate the OpenAPI documentation for dictionary of endpoints for a specific route.
+#     """
+#     route_schema = {}
+#     for http_method, endpoint in route_dict.items():
+#         body_schema = get_openapi_endpoint_body_schema(endpoint)
+#         responses_schema = get_openapi_endpoint_responses_schema(endpoint)
+#         route_schema[http_method.lower()] = {
+#             "description": endpoint.docstring,
+#             "responses": responses_schema,
+#         }
+#         has_properties = bool(body_schema["properties"])
+#         has_body = has_properties or bool(body_schema["additionalProperties"])
+#         if has_body:
+#             route_schema[http_method.lower()]["requestBody"] = {
+#                 "required": has_properties,
+#                 "content": {"application/json": {"schema": body_schema}},
+#             }
+#     return route_schema
+
+
+# def get_openapi(sym_obj, title, version="0.0.1", openapi_version="3.0.3"):
+#     """
+#     Gets the OpenAPI spec of every endpoint and assembles it into a
+#     JSON formatted object.
+#     """
+#     return {
+#         "openapi": openapi_version,
+#         "info": {
+#             "title": title,
+#             "version": version
+#         },
+#         "paths": functools.reduce(
+#             lambda x, y: {**x, **y},
+#             [get_openapi_endpoint(endpoint) for endpoint in sym_obj.endpoints
+#                 if symmetric.openapi.helpers.is_not_docs(endpoint.route)],
+#             {}
+#         ),
+#         "components": {
+#             "securitySchemes": {
+#                 "APIKeyAuth": {
+#                     "type": "apiKey",
+#                     "in": "header",
+#                     "name": sym_obj.client_token_name
+#                 }
+#             },
+#             "responses": {
+#                 "SuccesfulOperation": {
+#                     "description": "Successful operation"
+#                 },
+#                 "UnauthorizedError": {
+#                     "description": "Invalid or non-existent authentication "
+#                                    "credentials."
+#                 },
+#                 "InternalError": {
+#                     "description": "Unexpected internal error (API method "
+#                                    "failed, probably due to a missuse of the "
+#                                    "underlying function)."
+#                 }
+#             }
+#         }
+#     }
