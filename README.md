@@ -182,8 +182,8 @@ response = httpx.post(
     "http://127.0.0.1:8000/predict",
     json={"data": mydata},
     headers={
-        "asymmetric_callback_url": "http://callback.url/receive/predictions",
-        "asymmetric_callback_method": "post",
+        "Asymmetric-Callback-URL": "http://callback.url/receive/predictions",
+        "Asymmetric-Callback-Method": "post",
     }
 )
 
@@ -199,9 +199,9 @@ response = httpx.post(
     "http://127.0.0.1:8000/predict",
     json={"data": mydata},
     headers={
-        "asymmetric_callback_url": "http://callback.url/receive/predictions",
-        "asymmetric_callback_method": "post",
-        "asymmetric_custom_callback_key": "predictions",
+        "Asymmetric-Callback-URL": "http://callback.url/receive/predictions",
+        "Asymmetric-Callback-Method": "post",
+        "Asymmetric-Custom-Callback-Key": "predictions",
     }
 )
 
@@ -212,9 +212,9 @@ That will send a `json` with one element, with `predictions` as a key and the re
 
 ```python
 callback_parameters = {
-    "callback_url_header": "send_me_here",
-    "callback_method_header": "use_me",
-    "custom_callback_key_header": "put_me_in_here",
+    "callback_url_header": "Send-Me-Here",
+    "callback_method_header": "Use-Me",
+    "custom_callback_key_header": "Put-Me-In-Here",
 }
 
 @asymmetric.router("/predict", callback=callback_parameters)
@@ -234,31 +234,31 @@ response = httpx.post(
     "http://127.0.0.1:8000/predict",
     json={"data": mydata},
     headers={
-        "send_me_here": "http://callback.url/receive/predictions",
-        "use_me": "post",
-        "put_me_in_here": "predictions",
+        "Send-Me-Here": "http://callback.url/receive/predictions",
+        "Use-Me": "post",
+        "Put-Me-In-Here": "predictions",
     }
 )
 
 print(response)
 ```
 
-As you probably imagine by now, the `callback` parameter can be a boolean or a dictionary with the following schema:
+As you probably imagine by now, the `callback` parameter can be a boolean or a dictionary with the following _pseudo-schema_:
 
-```json
+```python
 {
-    "type": "object",
-    "properties": {
-        "callback_url_header": {
-            "type": "string"
-        },
-        "callback_method_header": {
-            "type": "string"
-        },
-        "custom_callback_key_header": {
-            "type": "string"
-        }
-    }
+    "callback_url_header": {
+        "required": False,
+        "type": str,
+    },
+    "callback_method_header": {
+        "required": False,
+        "type": str,
+    },
+    "custom_callback_key_header": {
+        "required": False,
+        "type": str,
+    },
 }
 ```
 

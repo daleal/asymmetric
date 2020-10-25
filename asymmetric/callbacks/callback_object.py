@@ -20,9 +20,9 @@ CALLBACK_OBJECT_SCHEMA = {
 
 
 CALLBACK_OBJECT_DEFAULTS = {
-    "callback_url_header": "asymmetric_callback_url",
-    "callback_method_header": "asymmetric_callback_method",
-    "custom_callback_key_header": "asymmetric_custom_callback_key",
+    "callback_url_header": "Asymmetric-Callback-URL",
+    "callback_method_header": "Asymmetric-Callback-Method",
+    "custom_callback_key_header": "Asymmetric-Custom-Callback-Key",
 }
 
 
