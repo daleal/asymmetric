@@ -14,6 +14,7 @@ from asymmetric.utils import get_body
 
 
 def configure_loggers() -> None:
+    """Configures the loggers."""
     # Logging configuration
     configuration: Dict[str, Any] = {
         "version": 1,

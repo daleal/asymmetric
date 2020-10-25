@@ -1,6 +1,6 @@
-import os
 import json
 import logging
+import os
 
 import pytest
 from starlette.requests import Request
