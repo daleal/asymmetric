@@ -7,6 +7,7 @@ from asymmetric.openapi.utils import (
     get_defaults_schema,
     get_no_defaults_schema,
     get_openapi_endpoint_body_schema,
+    get_openapi_endpoint_responses_schema,
     get_parameters_amount,
 )
 
@@ -252,3 +253,108 @@ class TestGetOpenAPIBodySchema:
     def test_kwargs_endpoint(self):
         schema = get_openapi_endpoint_body_schema(self.kwargs_endpoint)
         assert schema == self.kwargs_schema
+
+
+class TestGetOpenAPIEndpointResponsesSchema:
+    def setup_method(self):
+        def no_response_annotation(x):
+            return x
+
+        def response_annotation(x) -> int:
+            return int(x)
+
+        def decorator(function):
+            def wrapper():
+                print("wrapping...")
+                function()
+                print("unwrapping...")
+
+            return wrapper
+
+        def create_endpoint(function, callback):
+            return Endpoint(
+                "/v1/test/open/api",
+                "GET",
+                function,
+                decorator(function),
+                callback=callback,
+                response_code=200,
+            )
+
+        self.not_annotated_no_callback_endpoint = create_endpoint(
+            no_response_annotation,
+            False,
+        )
+        self.not_annotated_no_callback_schema = {
+            "200": {
+                "$ref": "#/components/responses/SuccesfulOperation",
+            },
+            "500": {
+                "$ref": "#/components/responses/InternalError",
+            },
+        }
+        self.annotated_no_callback_endpoint = create_endpoint(
+            response_annotation,
+            False,
+        )
+        self.annotated_no_callback_schema = {
+            "200": {
+                "$ref": "#/components/responses/SuccesfulOperation",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "integer",
+                        },
+                    },
+                },
+            },
+            "500": {
+                "$ref": "#/components/responses/InternalError",
+            },
+        }
+        self.not_annotated_callback_endpoint = create_endpoint(
+            no_response_annotation,
+            True,
+        )
+        self.not_annotated_callback_schema = {
+            "202": {
+                "$ref": "#/components/responses/AcceptedOperation",
+            },
+            "500": {
+                "$ref": "#/components/responses/InternalError",
+            },
+        }
+        self.annotated_callback_endpoint = create_endpoint(
+            response_annotation,
+            True,
+        )
+        self.annotated_callback_schema = {
+            "202": {
+                "$ref": "#/components/responses/AcceptedOperation",
+            },
+            "500": {
+                "$ref": "#/components/responses/InternalError",
+            },
+        }
+
+    def test_not_annotated_no_callback_endpoint(self):
+        schema = get_openapi_endpoint_responses_schema(
+            self.not_annotated_no_callback_endpoint
+        )
+        assert schema == self.not_annotated_no_callback_schema
+
+    def test_annotated_no_callback_endpoint(self):
+        schema = get_openapi_endpoint_responses_schema(
+            self.annotated_no_callback_endpoint
+        )
+        assert schema == self.annotated_no_callback_schema
+
+    def test_not_annotated_callback_endpoint(self):
+        schema = get_openapi_endpoint_responses_schema(
+            self.not_annotated_callback_endpoint
+        )
+        assert schema == self.not_annotated_callback_schema
+
+    def test_annotated_callback_endpoint(self):
+        schema = get_openapi_endpoint_responses_schema(self.annotated_callback_endpoint)
+        assert schema == self.annotated_callback_schema

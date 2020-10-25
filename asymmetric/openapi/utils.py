@@ -58,7 +58,7 @@ def get_defaults_schema(params: FullArgSpec) -> Dict[str, Any]:
 
 
 def get_openapi_endpoint_body_schema(endpoint: Endpoint) -> Dict[str, Any]:
-    """Assembles the JSON schema for the endpoint body."""
+    """Assembles the OpenAPI schema for the endpoint body."""
     params = getfullargspec(endpoint.function)
     no_defaults_schema = get_no_defaults_schema(params)
     defaults_schema = get_defaults_schema(params)
@@ -67,3 +67,22 @@ def get_openapi_endpoint_body_schema(endpoint: Endpoint) -> Dict[str, Any]:
         "properties": {**no_defaults_schema, **defaults_schema},
         "additionalProperties": params.varkw is not None,
     }
+
+
+def get_openapi_endpoint_responses_schema(endpoint: Endpoint) -> Dict[str, Any]:
+    """Assembles the OpenAPI schema for the endpoint responses."""
+    params = getfullargspec(endpoint.function)
+    response_type = "AcceptedOperation" if endpoint.callback else "SuccesfulOperation"
+    responses: Dict[str, Any] = {
+        f"{endpoint.response_code}": {
+            "$ref": f"#/components/responses/{response_type}"
+        },
+        "500": {"$ref": "#/components/responses/InternalError"},
+    }
+    if endpoint.callback is False and "return" in params.annotations:
+        responses[f"{endpoint.response_code}"]["content"] = {
+            "application/json": {
+                "schema": {"type": type_to_string(params.annotations["return"])}
+            }
+        }
+    return responses
