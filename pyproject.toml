@@ -31,7 +31,9 @@ exclude = [
     ".flake8",
     ".pylintrc",
     "mypy.ini",
-    "Makefile"
+    "Makefile",
+    "scripts",
+    "tests"
 ]
 
 [tool.poetry.dependencies]
