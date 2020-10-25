@@ -9,6 +9,10 @@ class TestEndpointClass:
         def function(x, y):
             return x + y
 
+        def docstring_function(x, y):
+            """This is a test docstring!"""
+            return x + y
+
         def decorator(function):
             def wrapper(*args, **kwargs):
                 return function(*args, **kwargs) + 10
@@ -20,21 +24,48 @@ class TestEndpointClass:
         self.response_code = 200
         self.function = function
         self.decorated_function = decorator(function)
+        self.docstring_function = docstring_function
+        self.decorated_docstring_function = decorator(docstring_function)
 
     def test_endpoint_instance_creation(self):
         instance = Endpoint(
             self.route,
             self.method,
-            self.response_code,
             self.function,
             self.decorated_function,
+            response_code=self.response_code,
         )
 
         assert isinstance(instance, Endpoint) is True
         assert instance.route == self.route
         assert instance.method == self.method
-        assert instance.response_code == self.response_code
         assert instance.function == self.function
+        assert instance.docstring == "No description provided."
+        assert instance.callback is False
+        assert instance.response_code == self.response_code
+
+    def test_docstring_endpoint_function(self):
+        instance = Endpoint(
+            self.route,
+            self.method,
+            self.docstring_function,
+            self.decorated_docstring_function,
+        )
+
+        assert instance.docstring == "This is a test docstring!"
+
+    def test_endpoint_callback_response_code(self):
+        instance = Endpoint(
+            self.route,
+            self.method,
+            self.function,
+            self.decorated_function,
+            callback=True,
+            response_code=self.response_code,
+        )
+        assert instance.callback is True
+        assert instance.response_code != self.response_code
+        assert instance.response_code == 202
 
 
 class TestEndpointsClass:
@@ -52,7 +83,6 @@ class TestEndpointsClass:
 
         self.route = "/v1/test/endpoint/class"
         self.methods = ["GET", "POST", "PATCH"]
-        self.response_code = 200
         self.function = function
         self.decorated_function = decorator(function)
 
@@ -84,7 +114,6 @@ class TestEndpointsClass:
         endpoint_object = Endpoint(
             self.route,
             self.methods[0],
-            self.response_code,
             self.function,
             self.decorated_function,
         )
@@ -98,19 +127,18 @@ class TestEndpointsClass:
         self.endpoints._Endpoints__add_endpoint(
             self.route,
             self.methods[0],
-            self.response_code,
             self.function,
             self.decorated_function,
         )
 
         created = self.endpoints._Endpoints__endpoints[self.route][self.methods[0]]
         assert isinstance(created, Endpoint) is True
+        assert created in self.endpoints.endpoints[self.route].values()
 
     def test_add_endpoint_two_different_elements(self):
         self.endpoints._Endpoints__add_endpoint(
             self.route,
             self.methods[0],
-            self.response_code,
             self.function,
             self.decorated_function,
         )
@@ -118,7 +146,6 @@ class TestEndpointsClass:
         self.endpoints._Endpoints__add_endpoint(
             self.route,
             self.methods[1],
-            self.response_code,
             self.function,
             self.decorated_function,
         )
@@ -134,7 +161,6 @@ class TestEndpointsClass:
             self.endpoints._Endpoints__add_endpoint(
                 self.route,
                 self.methods[0],
-                self.response_code,
                 self.function,
                 self.decorated_function,
             )
@@ -142,7 +168,6 @@ class TestEndpointsClass:
             self.endpoints._Endpoints__add_endpoint(
                 self.route,
                 self.methods[0],
-                self.response_code,
                 self.function,
                 self.decorated_function,
             )
@@ -151,7 +176,6 @@ class TestEndpointsClass:
         self.endpoints.add_endpoints(
             self.route,
             self.methods,
-            self.response_code,
             self.function,
             self.decorated_function,
         )

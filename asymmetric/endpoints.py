@@ -2,7 +2,8 @@
 A module for containing the endpoint logic of asymmetric.
 """
 
-from typing import Any, Callable, Dict, List, Optional
+from inspect import getdoc
+from typing import Any, Callable, Dict, List, Optional, Union
 
 from asymmetric.errors import DuplicatedEndpointError
 
@@ -17,15 +18,17 @@ class Endpoint:
         self,
         route: str,
         method: str,
-        response_code: int,
         function: Callable[..., Any],
         decorated_function: Callable[..., Any],
+        callback: Union[Dict[str, Any], bool] = False,
+        response_code: int = 200,
     ) -> None:
         self.__route: str = route
         self.__method: str = method
-        self.__response_code: int = response_code
         self.__function: Callable[..., Any] = function
         self.__decorated_function: Callable[..., Any] = decorated_function
+        self.__callback = callback
+        self.__response_code: int = response_code
 
     @property
     def route(self) -> str:
@@ -39,13 +42,24 @@ class Endpoint:
 
     @property
     def response_code(self) -> int:
-        """Returns the response code of the endpoint."""
-        return self.__response_code
+        """Returns the response code of the endpoint on a request."""
+        return self.__response_code if not self.__callback else 202
+
+    @property
+    def callback(self) -> Union[Dict[str, Any], bool]:
+        """Returns the response code of the endpoint on a request."""
+        return self.__callback
 
     @property
     def function(self) -> Callable[..., Any]:
         """Returns the raw function of the endpoint."""
         return self.__function
+
+    @property
+    def docstring(self) -> str:
+        """Returns the docstring content of the endpoint function."""
+        docstring = getdoc(self.__function)
+        return docstring or "No description provided."
 
 
 class Endpoints:  # pylint: disable=R0903
@@ -57,13 +71,19 @@ class Endpoints:  # pylint: disable=R0903
     def __init__(self) -> None:
         self.__endpoints: Dict[str, Dict[str, Endpoint]] = {}
 
+    @property
+    def endpoints(self) -> Dict[str, Dict[str, Endpoint]]:
+        """Returns the endpoints dict."""
+        return self.__endpoints
+
     def add_endpoints(
         self,
         route: str,
         methods: List[str],
-        response_code: int,
         function: Callable[..., Any],
         decorated_function: Callable[..., Any],
+        callback: Union[Dict[str, Any], bool] = False,
+        response_code: int = 200,
     ) -> None:
         """
         Adds an endpoint for every method specified.
@@ -72,18 +92,20 @@ class Endpoints:  # pylint: disable=R0903
             self.__add_endpoint(
                 route,
                 method,
-                response_code,
                 function,
                 decorated_function,
+                callback=callback,
+                response_code=response_code,
             )
 
     def __add_endpoint(
         self,
         route: str,
         method: str,
-        response_code: int,
         function: Callable[..., Any],
         decorated_function: Callable[..., Any],
+        callback: Union[Dict[str, Any], bool] = False,
+        response_code: int = 200,
     ) -> None:
         """
         Checks if the desired endpoint does not exist. If it exists,
@@ -98,9 +120,10 @@ class Endpoints:  # pylint: disable=R0903
         endpoint = Endpoint(
             route,
             method,
-            response_code,
             function,
             decorated_function,
+            callback=callback,
+            response_code=response_code,
         )
 
         route_dictionary = self.__get_route(route)

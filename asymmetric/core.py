@@ -7,15 +7,22 @@ from typing import Any, Callable, Dict, List, Union
 
 from starlette.applications import Starlette
 from starlette.requests import Request
-from starlette.responses import JSONResponse
+from starlette.responses import HTMLResponse, JSONResponse
 from starlette.types import Receive, Scope, Send
 
 from asymmetric.callbacks.core import CallbackClient
-from asymmetric.constants import HTTP_METHODS
+from asymmetric.constants import (
+    HTTP_METHODS,
+    OPENAPI_SPEC_ROUTE,
+    REDOC_DOCUMENTATION_ROUTE,
+    SWAGGER_DOCUMENTATION_ROUTE,
+)
 from asymmetric.endpoints import Endpoints
 from asymmetric.errors import DuplicatedEndpointError
 from asymmetric.helpers import http_verb
 from asymmetric.loggers import log, log_request
+from asymmetric.openapi.documentation_renderers import get_redoc_html, get_swagger_html
+from asymmetric.openapi.utils import get_openapi
 from asymmetric.singleton import AsymmetricSingleton
 from asymmetric.utils import filter_params, generic_call, get_body, handle_error
 
@@ -30,6 +37,8 @@ class _Asymmetric(metaclass=AsymmetricSingleton):
     def __init__(self) -> None:
         self.__app: Starlette = Starlette()
         self.__endpoints: Endpoints = Endpoints()
+        self.__openapi_schema: Union[Dict[str, Any], None] = None
+        self.__setup()
 
     async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
         await self.__app.__call__(scope, receive, send)
@@ -40,6 +49,36 @@ class _Asymmetric(metaclass=AsymmetricSingleton):
         if they aren't part of it and redirect them to the Starlette app.
         """
         return getattr(self.__app, attr)
+
+    @property
+    def openapi(self) -> Dict[str, Any]:
+        """
+        Returns the openapi schema. If it does not exist, it creates it
+        and returns it.
+        """
+        if self.__openapi_schema is None:
+            self.__openapi_schema = get_openapi(self, "Asymmetric API")
+        return self.__openapi_schema
+
+    def __setup(self) -> None:
+        """Sets up the API."""
+        # Set up the endpoint for the openapi json schema
+        # pylint: disable=W0612
+        @self.__app.route(OPENAPI_SPEC_ROUTE)
+        def openapi_schema(request: Request) -> JSONResponse:
+            return JSONResponse(self.openapi)
+
+        # Set up the endpoint for the Swagger interactive documentation
+        # pylint: disable=W0612
+        @self.__app.route(SWAGGER_DOCUMENTATION_ROUTE)
+        def swagger(request: Request) -> HTMLResponse:
+            return HTMLResponse(get_swagger_html("Asymmetric API"))
+
+        # Set up the endpoint for the ReDoc interactive documentation
+        # pylint: disable=W0612
+        @self.__app.route(REDOC_DOCUMENTATION_ROUTE)
+        def redoc(request: Request) -> HTMLResponse:
+            return HTMLResponse(get_redoc_html("Asymmetric API"))
 
     def router(
         self,
@@ -62,7 +101,6 @@ class _Asymmetric(metaclass=AsymmetricSingleton):
 
             if callback:
                 callback_client = CallbackClient(function, callback)
-                callback_client.prepare_and_validate_finders()
 
             @self.__app.route(route, methods=methods)
             async def wrapper(request: Request) -> JSONResponse:
@@ -92,9 +130,10 @@ class _Asymmetric(metaclass=AsymmetricSingleton):
                 self.__endpoints.add_endpoints(
                     route,
                     methods,
-                    response_code,
                     function,  # Save unchanged function
                     wrapper,  # Save starlette decorated function
+                    callback=callback,
+                    response_code=response_code,
                 )
             except DuplicatedEndpointError as error:
                 log(f"DuplicatedEndpointError: {error}", level="critical")

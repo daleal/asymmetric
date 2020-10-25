@@ -25,8 +25,8 @@ Raw developing speed and ease of use, that's why. `asymmetric` is based on **[St
 - Auto logging (configure logs with the `LOG_FILE` and `LOG_LEVEL` environmental variables).
 - Server-side error detection and exception handling.
 - **Asynchronous callback endpoints** to make a request, terminate the request **immediately** and then have the server make a request to a _callback_ endpoint with the results! ✨
-- ~~Auto-generated `/docs` endpoint for your API with **interactive documentation**.~~ **[UNDER CONSTRUCTION]**
-- ~~Auto-generated [OpenAPI Specification](https://swagger.io/docs/specification/about/) documentation files for your API.~~ **[UNDER CONSTRUCTION]**
+- Auto-generated `/docs` and `/redoc` endpoint for your API with **interactive documentation**.
+- Auto-generated [OpenAPI Specification](https://swagger.io/docs/specification/about/) documentation files for your API (**for now**, only accessible through a `GET` to `/openapi.json`).
 
 The [complete documentation](https://asymmetric.one/docs/) is available on the [official website](https://asymmetric.one/).
 
@@ -182,8 +182,8 @@ response = httpx.post(
     "http://127.0.0.1:8000/predict",
     json={"data": mydata},
     headers={
-        "asymmetric_callback_url": "http://callback.url/receive/predictions",
-        "asymmetric_callback_method": "post",
+        "Asymmetric-Callback-URL": "http://callback.url/receive/predictions",
+        "Asymmetric-Callback-Method": "post",
     }
 )
 
@@ -199,9 +199,9 @@ response = httpx.post(
     "http://127.0.0.1:8000/predict",
     json={"data": mydata},
     headers={
-        "asymmetric_callback_url": "http://callback.url/receive/predictions",
-        "asymmetric_callback_method": "post",
-        "asymmetric_custom_callback_key": "predictions",
+        "Asymmetric-Callback-URL": "http://callback.url/receive/predictions",
+        "Asymmetric-Callback-Method": "post",
+        "Asymmetric-Custom-Callback-Key": "predictions",
     }
 )
 
@@ -212,9 +212,9 @@ That will send a `json` with one element, with `predictions` as a key and the re
 
 ```python
 callback_parameters = {
-    "callback_url_header": "send_me_here",
-    "callback_method_header": "use_me",
-    "custom_callback_key_header": "put_me_in_here",
+    "callback_url_header": "Send-Me-Here",
+    "callback_method_header": "Use-Me",
+    "custom_callback_key_header": "Put-Me-In-Here",
 }
 
 @asymmetric.router("/predict", callback=callback_parameters)
@@ -234,47 +234,44 @@ response = httpx.post(
     "http://127.0.0.1:8000/predict",
     json={"data": mydata},
     headers={
-        "send_me_here": "http://callback.url/receive/predictions",
-        "use_me": "post",
-        "put_me_in_here": "predictions",
+        "Send-Me-Here": "http://callback.url/receive/predictions",
+        "Use-Me": "post",
+        "Put-Me-In-Here": "predictions",
     }
 )
 
 print(response)
 ```
 
-As you probably imagine by now, the `callback` parameter can be a boolean or a dictionary with the following schema:
+As you probably imagine by now, the `callback` parameter can be a boolean or a dictionary with the following _pseudo-schema_:
 
-```json
+```python
 {
-    "type": "object",
-    "properties": {
-        "callback_url_header": {
-            "type": "string"
-        },
-        "callback_method_header": {
-            "type": "string"
-        },
-        "custom_callback_key_header": {
-            "type": "string"
-        }
-    }
+    "callback_url_header": {
+        "required": False,
+        "type": str,
+    },
+    "callback_method_header": {
+        "required": False,
+        "type": str,
+    },
+    "custom_callback_key_header": {
+        "required": False,
+        "type": str,
+    },
 }
 ```
 
 If no `HTTP` method is specified, the server will `POST` the information to the callback `URL`.
 
-## ~~ReDoc Documentation~~
+## ReDoc/Swagger Documentation
 
-**[UNDER CONSTRUCTION]**
+By default, you can `GET` the `/docs` or the `/redoc` endpoints (using a browser) to access to **interactive auto-generated documentation** about your API. It will include request bodies for each endpoint, response codes, headers required, default values, and much more!
 
-By default, you can `GET` the `/docs` endpoint (using a browser) to access to **interactive auto-generated documentation** about your API. It will include request bodies for each endpoint, response codes, authentication required, default values, and much more!
-
-**Tip**: Given that the [ReDoc Documentation](https://github.com/Redocly/redoc) is based on the OpenAPI standard, using **type annotations** in your code will result in a more detailed interactive documentation. Instead of the parameters being allowed to be any type, they will be forced into the type declared in your code. Cool, right?
+**Tip**: Given that the [ReDoc Documentation](https://github.com/Redocly/redoc) and the [SwaggerUI Documentation](https://swagger.io/tools/swagger-ui/) are based on the OpenAPI standard, using **type annotations** in your code will result in a more detailed interactive documentation. Instead of the parameters being allowed to be any type, they will be forced into the type declared in your code. Cool, right?
 
 ## To Do
 
-- _Automagic_ OpenAPI spec isn't being generated rigth now, so that's missing from the library. It will soon be added, though, as it is a very useful _feature_.
 - Parse callback `URL`s to make sure that they are valid `URL`s, and fail if they aren't.
 
 ## Developing
