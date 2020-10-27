@@ -5,7 +5,31 @@ A module for every helper of the asymmetric CLI.
 from argparse import ArgumentParser
 
 
+def setup_documentation_arguments(
+    documentation_parser: ArgumentParser
+) -> ArgumentParser:
+    """Setup the arguments for the documentation parser for the asymmetric CLI."""
+    # Module name
+    documentation_parser.add_argument(
+        "module",
+        metavar="module",
+        help="Name of the module that uses the asymmetric object.",
+    )
+
+    # Filename
+    documentation_parser.add_argument(
+        "-f",
+        "--filename",
+        dest="filename",
+        default="openapi.json",
+        help="Name of the file in where to write the OpenAPI documentation spec.",
+    )
+
+    return documentation_parser
+
+
 def setup_runner_arguments(runner_parser: ArgumentParser) -> ArgumentParser:
+    """Setup the arguments for the runner parser for the asymmetric CLI."""
     # Module name
     runner_parser.add_argument(
         "module",
@@ -15,7 +39,7 @@ def setup_runner_arguments(runner_parser: ArgumentParser) -> ArgumentParser:
 
     # Host
     runner_parser.add_argument(
-        "-h", "--host",
+        "--host",
         dest="host",
         default=None,
         help="Bind socket to this host. [default: 127.0.0.1]"
@@ -23,7 +47,7 @@ def setup_runner_arguments(runner_parser: ArgumentParser) -> ArgumentParser:
 
     # Port
     runner_parser.add_argument(
-        "-p", "--port",
+        "--port",
         dest="port",
         type=int,
         default=None,
@@ -49,7 +73,7 @@ def setup_runner_arguments(runner_parser: ArgumentParser) -> ArgumentParser:
 
     # Reload
     runner_parser.add_argument(
-        "-r", "--reload",
+        "--reload",
         dest="reload",
         action='store_const',
         default=False,
@@ -177,8 +201,8 @@ def setup_runner_arguments(runner_parser: ArgumentParser) -> ArgumentParser:
 
     # Enable proxy headers
     runner_parser.add_argument(
-        "--use-colors",
-        dest="use_colors",
+        "--proxy-headers",
+        dest="proxy_headers",
         help=(
             "Enable X-Forwarded-Proto, X-Forwarded-For, X-Forwarded-Port to "
             "populate remote address info."
@@ -187,8 +211,8 @@ def setup_runner_arguments(runner_parser: ArgumentParser) -> ArgumentParser:
 
     # Disable proxy headers
     runner_parser.add_argument(
-        "--no-use-colors",
-        dest="no_use_colors",
+        "--no-proxy-headers",
+        dest="no_proxy_headers",
         help=(
             "Disable X-Forwarded-Proto, X-Forwarded-For, X-Forwarded-Port to "
             "populate remote address info."
@@ -337,7 +361,8 @@ def setup_runner_arguments(runner_parser: ArgumentParser) -> ArgumentParser:
         help=(
             "Look for APP in the specified directory, "
             "by adding this to the PYTHONPATH. Defaults "
-            "to the current working directory.")
+            "to the current working directory."
+        ),
     )
 
     return runner_parser

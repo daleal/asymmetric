@@ -7,7 +7,7 @@ from argparse import ArgumentParser, _SubParsersAction
 from typing import Any
 
 import asymmetric
-from asymmetric.cli.helpers import setup_runner_arguments
+from asymmetric.cli.helpers import setup_documentation_arguments, setup_runner_arguments
 from asymmetric.cli.utils import document_openapi
 
 
@@ -47,6 +47,9 @@ def generate_parser() -> ArgumentParser:
     # Create subparsers
     subparsers = parser.add_subparsers(help="Action to be executed.")
 
+    # Runner parser
+    generate_runner_subparser(subparsers)
+
     # Documentation parser
     generate_documentation_subparser(subparsers)
 
@@ -64,21 +67,4 @@ def generate_documentation_subparser(subparsers: _SubParsersAction) -> ArgumentP
     """Generates the subparser for the auto-documentation option."""
     documentation_parser = subparsers.add_parser("docs")
     documentation_parser.set_defaults(action="docs")
-
-    # Module name
-    documentation_parser.add_argument(
-        "module",
-        metavar="module",
-        help="Name of the module that uses the symmetric object.",
-    )
-
-    # Filename
-    documentation_parser.add_argument(
-        "-f",
-        "--filename",
-        dest="filename",
-        default="openapi.json",
-        help="Name of the file in where to write the OpenAPI documentation spec.",
-    )
-
-    return documentation_parser
+    return setup_documentation_arguments(documentation_parser)
