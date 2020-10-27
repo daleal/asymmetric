@@ -5,9 +5,9 @@ import pytest
 import asymmetric
 from asymmetric.cli.core import (
     dispatcher,
-    generate_runner_subparser,
     generate_documentation_subparser,
     generate_parser,
+    generate_runner_subparser,
 )
 
 

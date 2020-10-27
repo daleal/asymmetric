@@ -3,10 +3,19 @@ A module for every helper of the asymmetric CLI.
 """
 
 from argparse import ArgumentParser
+from typing import Any, Dict
+
+
+def clear_runner_args(args: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Given an args object, return a dictionary with the keys and values of only the
+    non-None values of the original object.
+    """
+    return {k: v for k, v in args.items() if v is not None}
 
 
 def setup_documentation_arguments(
-    documentation_parser: ArgumentParser
+    documentation_parser: ArgumentParser,
 ) -> ArgumentParser:
     """Setup the arguments for the documentation parser for the asymmetric CLI."""
     # Module name
@@ -34,7 +43,7 @@ def setup_runner_arguments(runner_parser: ArgumentParser) -> ArgumentParser:
     runner_parser.add_argument(
         "module",
         metavar="module",
-        help="Name of the module that uses the asymmetric object."
+        help="Name of the module that uses the asymmetric object.",
     )
 
     # Host
@@ -42,7 +51,7 @@ def setup_runner_arguments(runner_parser: ArgumentParser) -> ArgumentParser:
         "--host",
         dest="host",
         default=None,
-        help="Bind socket to this host. [default: 127.0.0.1]"
+        help="Bind socket to this host. [default: 127.0.0.1]",
     )
 
     # Port
@@ -51,7 +60,7 @@ def setup_runner_arguments(runner_parser: ArgumentParser) -> ArgumentParser:
         dest="port",
         type=int,
         default=None,
-        help="Bind socket to this port. [default: 8000]"
+        help="Bind socket to this port. [default: 8000]",
     )
 
     # Unix Domain Socket
@@ -75,10 +84,10 @@ def setup_runner_arguments(runner_parser: ArgumentParser) -> ArgumentParser:
     runner_parser.add_argument(
         "--reload",
         dest="reload",
-        action='store_const',
+        action="store_const",
         default=False,
         const=True,
-        help="Enable auto-reload."
+        help="Enable auto-reload.",
     )
 
     # Reload Directory

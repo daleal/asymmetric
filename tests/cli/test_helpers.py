@@ -1,6 +1,29 @@
 from argparse import ArgumentParser
 
-from asymmetric.cli.helpers import setup_documentation_arguments, setup_runner_arguments
+from asymmetric.cli.helpers import (
+    clear_runner_args,
+    setup_documentation_arguments,
+    setup_runner_arguments,
+)
+
+
+class TestClearRunnerArgs:
+    def setup_method(self):
+        self.all_valid = {"x": True, "y": False, "z": "Test!"}
+        self.some_valid = {"x": True, "y": None, "z": "Test!"}
+        self.none_valid = {"x": None, "y": None, "z": None}
+
+    def test_clear_all_valid_runner_args(self):
+        final = clear_runner_args(self.all_valid)
+        assert final == self.all_valid
+
+    def test_clear_some_valid_runner_args(self):
+        final = clear_runner_args(self.some_valid)
+        assert final == {"x": True, "z": "Test!"}
+
+    def test_clear_none_valid_runner_args(self):
+        final = clear_runner_args(self.none_valid)
+        assert final == {}
 
 
 class TestSetupDocumentationArguments:

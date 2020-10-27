@@ -8,7 +8,7 @@ from typing import Any
 
 import asymmetric
 from asymmetric.cli.helpers import setup_documentation_arguments, setup_runner_arguments
-from asymmetric.cli.utils import document_openapi
+from asymmetric.cli.utils import document_openapi, get_asymmetric_object, start_server
 
 
 def dispatcher(*args: Any, **kwargs: Any) -> None:
@@ -20,7 +20,12 @@ def dispatcher(*args: Any, **kwargs: Any) -> None:
     parsed_args = parser.parse_args(*args, **kwargs)
 
     try:
-        if parsed_args.action == "docs":
+        if parsed_args.action == "run":
+            run_args = vars(parsed_args)
+            run_args.pop("action")
+            module_name = run_args.pop("module")
+            start_server(module_name, run_args)
+        elif parsed_args.action == "docs":
             document_openapi(parsed_args.module, parsed_args.filename)
     except AttributeError:
         print("An argument is required for the asymmetric command.")
