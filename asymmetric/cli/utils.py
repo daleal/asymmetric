@@ -5,11 +5,12 @@ A module to hold some CLI utilities.
 import json
 import os
 import sys
-import uvicorn
 from importlib import import_module
 from traceback import print_exception
 from types import ModuleType
 from typing import Any, Dict
+
+import uvicorn
 
 from asymmetric.cli.helpers import clear_runner_args
 from asymmetric.core import _Asymmetric
