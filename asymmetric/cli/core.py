@@ -7,6 +7,7 @@ from argparse import ArgumentParser, _SubParsersAction
 from typing import Any
 
 import asymmetric
+from asymmetric.cli.helpers import setup_runner_arguments
 from asymmetric.cli.utils import document_openapi
 
 
@@ -50,6 +51,13 @@ def generate_parser() -> ArgumentParser:
     generate_documentation_subparser(subparsers)
 
     return parser
+
+
+def generate_runner_subparser(subparsers: _SubParsersAction) -> ArgumentParser:
+    """Generates the subparser for the run server option."""
+    runner_parser = subparsers.add_parser("run")
+    runner_parser.set_defaults(action="run")
+    return setup_runner_arguments(runner_parser)
 
 
 def generate_documentation_subparser(subparsers: _SubParsersAction) -> ArgumentParser:
