@@ -315,7 +315,7 @@ make tests
 
 ## Aknowledgements
 
-This project wouldn't be possible without [Encode](https://github.com/encode), as literally all hard dependencies (`Starlette` and `httpx`) are developed by them. Even `uvicorn` is theirs. Thanks guys! `asymmetric` also takes inspiration from [`FastAPI`](https://github.com/tiangolo/fastapi) on some implementation details, so thank you too for such an awesome project. Finally, thank you! Yes, you! If you are reading this, there is a good chance that you have at least some interest in `asymmetric`. If you have feedback, if you find a bug, if you want to ask for a _feature_ or even if you just want to talk, I'd be glad to hear from you! You're the reason this project exists ♥.
+This project wouldn't be possible without [Encode](https://github.com/encode), as literally all hard dependencies (`Starlette` and `httpx`) are developed by them. Even `uvicorn` is theirs. Thanks guys! `asymmetric` also takes inspiration from [`FastAPI`](https://github.com/tiangolo/fastapi) on some implementation details, so thank you too for such an awesome project. Also, I want to thank **every person** who has given me some kind of advice or that has had to listen to me going on and on **and on** about this project and the reasons that make it **great**. Finally, thank you! Yes, you! If you are reading this, there is a good chance that you have at least some interest in `asymmetric`. If you have feedback, if you find a bug, if you want to ask for a _feature_ or even if you just want to talk, I'd be glad to hear from you! You're the reason this project exists ♥.
 
 ## Resources
 
