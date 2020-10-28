@@ -20,7 +20,7 @@ def dispatcher(*args: Any, **kwargs: Any) -> None:
     parsed_args = parser.parse_args(*args, **kwargs)
 
     try:
-        if parsed_args.action == "run":
+        if parsed_args.action == "run":  # pragma: no cover
             run_args = vars(parsed_args)
             run_args.pop("action")
             module_name = run_args.pop("module")

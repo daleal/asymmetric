@@ -20,7 +20,7 @@ from asymmetric.loggers import configure_loggers
 from asymmetric.openapi.core import get_openapi
 
 
-def start_server(module: str, arguments: Dict[str, Any]) -> None:
+def start_server(module: str, arguments: Dict[str, Any]) -> None:  # pragma: no cover
     """
     Tries to find the asymmetric object and then runs an uvicorn server
     with the parameters given to the method.
