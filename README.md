@@ -1,24 +1,34 @@
-<p align="center"><a href="https://github.com/daleal/asymmetric"><img src="https://asymmetric.daleal.dev/assets/asymmetric-250x250.png"></a></p>
+<p align="center">
+    <a href="https://github.com/daleal/asymmetric">
+        <img src="https://asymmetric.daleal.dev/assets/asymmetric-250x250.png">
+    </a>
+</p>
 
 <h1 align="center">Asymmetric</h1>
 
+<p align="center">
+    <em>
+        Ridiculously fast and easy module-to-API transformations. Learn in minutes, implement in seconds. Batteries included.
+    </em>
+</p>
+
+<p align="center">
 <a href="https://pypi.org/project/asymmetric" target="_blank">
-    <img src="https://img.shields.io/pypi/v/asymmetric?label=version&logo=python&logoColor=%23fff&color=306998&style=for-the-badge" alt="PyPI - Version">
+    <img src="https://img.shields.io/pypi/v/asymmetric?label=version&logo=python&logoColor=%23fff&color=306998" alt="PyPI - Version">
 </a>
 
-_The async framework that calls you back_! ✨ Enable ridiculously fast and easy module-to-**[API](https://en.wikipedia.org/wiki/Web_API)** transformations. Learn in minutes, implement in seconds. Batteries included.
-
 <a href="https://github.com/daleal/asymmetric/actions?query=workflow%3Atests" target="_blank">
-    <img src="https://img.shields.io/github/workflow/status/daleal/asymmetric/tests?label=tests&logo=python&logoColor=%23fff&style=for-the-badge" alt="Tests">
+    <img src="https://img.shields.io/github/workflow/status/daleal/asymmetric/tests?label=tests&logo=python&logoColor=%23fff" alt="Tests">
 </a>
 
 <a href="https://codecov.io/gh/daleal/asymmetric" target="_blank">
-    <img src="https://img.shields.io/codecov/c/gh/daleal/asymmetric?label=coverage&logo=codecov&logoColor=ffffff&style=for-the-badge" alt="Coverage">
+    <img src="https://img.shields.io/codecov/c/gh/daleal/asymmetric?label=coverage&logo=codecov&logoColor=ffffff" alt="Coverage">
 </a>
 
 <a href="https://github.com/daleal/asymmetric/actions?query=workflow%3Alinters" target="_blank">
-    <img src="https://img.shields.io/github/workflow/status/daleal/asymmetric/linters?label=linters&logo=github&style=for-the-badge" alt="Linters">
+    <img src="https://img.shields.io/github/workflow/status/daleal/asymmetric/linters?label=linters&logo=github" alt="Linters">
 </a>
+</p>
 
 ## Why Asymmetric?
 
