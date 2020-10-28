@@ -20,7 +20,7 @@ _The async framework that calls you back_! ✨ Enable ridiculously fast and easy
 
 ## Why Asymmetric?
 
-Raw developing speed and ease of use, that's why. `asymmetric` is based on **[Starlette](https://github.com/encode/Starlette)** ✨! While `Starlette` is a powerful tool to have, getting it to work from scratch can be a bit of a pain, especially if you have never used it before. The idea behind `asymmetric` is to be able to take any module **already written** and transform it into a working API in a matter of minutes, instead of having to design the module ground-up to work with `Starlette` (it can also be used to build an API from scratch really fast). With `asymmetric`, you will also get some neat features, namely:
+Raw developing speed and ease of use, that's why. `asymmetric` is based on **[starlette](https://github.com/encode/starlette)** ✨! While `starlette` is a powerful tool to have, getting it to work from scratch can be a bit of a pain, especially if you have never used it before. The idea behind `asymmetric` is to be able to take any module **already written** and transform it into a working API in a matter of minutes, instead of having to design the module ground-up to work with `starlette` (it can also be used to build an API from scratch really fast). With `asymmetric`, you will also get some neat features, namely:
 
 - Auto logging (configure logs with the `LOG_FILE` environmental variable).
 - Server-side error detection and exception handling.
@@ -48,7 +48,7 @@ pip install asymmetric
 asymmetric run <module> --reload
 ```
 
-Where `<module>` is your module name (in the examples, we will be writing in a file named `module.py`, so the module name will be just `module`). A `Starlette` instance will be spawned immediately and can be reached at [http://127.0.0.1:8000](http://127.0.0.1:8000) by default. We don't have any endpoints yet, so we'll add some later. **All of the flags for `uvicorn` are accepted as flags for `asymmetric run`**.
+Where `<module>` is your module name (in the examples, we will be writing in a file named `module.py`, so the module name will be just `module`). A `starlette` instance will be spawned immediately and can be reached at [http://127.0.0.1:8000](http://127.0.0.1:8000) by default. We don't have any endpoints yet, so we'll add some later. **All of the flags for `uvicorn` are accepted as flags for `asymmetric run`**.
 
 **Sidenote**: `asymmetric` is fully compatible with any `ASGI` server! If you don't know what that is, don't worry! You don't need to. But if you want to use another `ASGI` server, you can! Just make sure to target the `asymmetric` object! In fact, the `asymmetric run <module>` command is practically an _alias_ for `uvicorn <module>:asymmetric`. So yes, by default the server running will be `uvicorn`, but, if you want to, you can also use `daphne` or `hypercorn`!
 
@@ -127,7 +127,7 @@ With this in mind, you can transform any existing project into a usable API very
 
 ## What about `async`?
 
-Given that the underlying framework is `Starlette`, you can use `async` to define your methods, no problem! Here's an example:
+Given that the underlying framework is `starlette`, you can use `async` to define your methods, no problem! Here's an example:
 
 ```py
 @asymmetric.router("/another-add")
@@ -315,7 +315,7 @@ make tests
 
 ## Aknowledgements
 
-This project wouldn't be possible without [Encode](https://github.com/encode), as literally all hard dependencies (`Starlette` and `httpx`) are developed by them. Even `uvicorn` is theirs. Thanks guys! `asymmetric` also takes inspiration from [`FastAPI`](https://github.com/tiangolo/fastapi) on some implementation details, so thank you too for such an awesome project. Also, I want to thank **every person** who has given me some kind of advice or that has had to listen to me going on and on **and on** about this project and the reasons that make it **great**. Finally, thank you! Yes, you! If you are reading this, there is a good chance that you have at least some interest in `asymmetric`. If you have feedback, if you find a bug, if you want to ask for a _feature_ or even if you just want to talk, I'd be glad to hear from you! You're the reason this project exists ♥.
+This project wouldn't be possible without [Encode](https://github.com/encode), as literally all hard dependencies (`starlette` and `httpx`) are developed by them. Even `uvicorn` is theirs. Thanks guys! `asymmetric` also takes inspiration from [`FastAPI`](https://github.com/tiangolo/fastapi) on some implementation details, so thank you too for such an awesome project. Also, I want to thank **every person** who has given me some kind of advice or that has had to listen to me going on and on **and on** about this project and the reasons that make it **great**. Finally, thank you! Yes, you! If you are reading this, there is a good chance that you have at least some interest in `asymmetric`. If you have feedback, if you find a bug, if you want to ask for a _feature_ or even if you just want to talk, I'd be glad to hear from you! You're the reason this project exists ♥.
 
 ## Resources
 
