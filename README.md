@@ -1,4 +1,6 @@
-# Asymmetric
+<p align="center"><a href="https://github.com/daleal/asymmetric"><img src="https://asymmetric.daleal.dev/assets/asymmetric-250x250.png"></a></p>
+
+<h1 align="center">Asymmetric</h1>
 
 <a href="https://pypi.org/project/asymmetric" target="_blank">
     <img src="https://img.shields.io/pypi/v/asymmetric?label=version&logo=python&logoColor=%23fff&color=306998&style=for-the-badge" alt="PyPI - Version">
