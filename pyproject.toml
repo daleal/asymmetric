@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "asymmetric"
 version = "0.3.0"
-description = "The async framework that calls you back! Enable ridiculously fast and easy module-to-API transformations. Learn in minutes, implement in seconds. Batteries included."
+description = "Ridiculously fast and easy module-to-API transformations. Learn in minutes, implement in seconds. Batteries included."
 license = "MIT"
 authors = ["Daniel Leal <dlleal@uc.cl>"]
 maintainers = ["Daniel Leal <dlleal@uc.cl>"]
