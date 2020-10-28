@@ -10,7 +10,7 @@ from traceback import print_exception
 from types import ModuleType
 from typing import Any, Dict
 
-import uvicorn
+import uvicorn  # type: ignore
 
 from asymmetric.cli.helpers import clear_runner_args
 from asymmetric.core import _Asymmetric

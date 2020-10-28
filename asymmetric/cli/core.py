@@ -8,7 +8,7 @@ from typing import Any
 
 import asymmetric
 from asymmetric.cli.helpers import setup_documentation_arguments, setup_runner_arguments
-from asymmetric.cli.utils import document_openapi, get_asymmetric_object, start_server
+from asymmetric.cli.utils import document_openapi, start_server
 
 
 def dispatcher(*args: Any, **kwargs: Any) -> None:
