@@ -7,6 +7,7 @@ from asymmetric.cli.core import (
     dispatcher,
     generate_documentation_subparser,
     generate_parser,
+    generate_runner_subparser,
 )
 
 
@@ -14,6 +15,14 @@ class TestGenerateParser:
     def test_generate_parser_creates_parser(self):
         parser = generate_parser()
         assert isinstance(parser, ArgumentParser)
+
+
+class TestGenerateRunnerSubparser:
+    def test_generate_subparser(self):
+        base_parser = ArgumentParser(description="Test parser.")
+        subparsers = base_parser.add_subparsers(help="Test subparsers.")
+        runner_parser = generate_runner_subparser(subparsers)
+        assert isinstance(runner_parser, ArgumentParser)
 
 
 class TestGenerateDocumentationSubparser:

@@ -7,7 +7,8 @@ from argparse import ArgumentParser, _SubParsersAction
 from typing import Any
 
 import asymmetric
-from asymmetric.cli.utils import document_openapi
+from asymmetric.cli.helpers import setup_documentation_arguments, setup_runner_arguments
+from asymmetric.cli.utils import document_openapi, start_server
 
 
 def dispatcher(*args: Any, **kwargs: Any) -> None:
@@ -19,7 +20,12 @@ def dispatcher(*args: Any, **kwargs: Any) -> None:
     parsed_args = parser.parse_args(*args, **kwargs)
 
     try:
-        if parsed_args.action == "docs":
+        if parsed_args.action == "run":  # pragma: no cover
+            run_args = vars(parsed_args)
+            run_args.pop("action")
+            module_name = run_args.pop("module")
+            start_server(module_name, run_args)
+        elif parsed_args.action == "docs":
             document_openapi(parsed_args.module, parsed_args.filename)
     except AttributeError:
         print("An argument is required for the asymmetric command.")
@@ -46,31 +52,24 @@ def generate_parser() -> ArgumentParser:
     # Create subparsers
     subparsers = parser.add_subparsers(help="Action to be executed.")
 
+    # Runner parser
+    generate_runner_subparser(subparsers)
+
     # Documentation parser
     generate_documentation_subparser(subparsers)
 
     return parser
 
 
+def generate_runner_subparser(subparsers: _SubParsersAction) -> ArgumentParser:
+    """Generates the subparser for the run server option."""
+    runner_parser = subparsers.add_parser("run")
+    runner_parser.set_defaults(action="run")
+    return setup_runner_arguments(runner_parser)
+
+
 def generate_documentation_subparser(subparsers: _SubParsersAction) -> ArgumentParser:
     """Generates the subparser for the auto-documentation option."""
     documentation_parser = subparsers.add_parser("docs")
     documentation_parser.set_defaults(action="docs")
-
-    # Module name
-    documentation_parser.add_argument(
-        "module",
-        metavar="module",
-        help="Name of the module that uses the symmetric object.",
-    )
-
-    # Filename
-    documentation_parser.add_argument(
-        "-f",
-        "--filename",
-        dest="filename",
-        default="openapi.json",
-        help="Name of the file in where to write the OpenAPI documentation spec.",
-    )
-
-    return documentation_parser
+    return setup_documentation_arguments(documentation_parser)

@@ -68,5 +68,7 @@ linters!:
 .PHONY: bump!
 bump!:
 	sh scripts/bump.sh $(filter-out $@,$(MAKECMDGOALS))
+
+# Receive args (use like `$(filter-out $@,$(MAKECMDGOALS))`)
 %:
 	@:

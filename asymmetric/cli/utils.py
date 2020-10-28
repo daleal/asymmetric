@@ -8,11 +8,35 @@ import sys
 from importlib import import_module
 from traceback import print_exception
 from types import ModuleType
+from typing import Any, Dict
 
+import uvicorn  # type: ignore
+
+from asymmetric.cli.helpers import clear_runner_args
 from asymmetric.core import _Asymmetric
 from asymmetric.errors import AppImportError
 from asymmetric.helpers import humanize
+from asymmetric.loggers import configure_loggers
 from asymmetric.openapi.core import get_openapi
+
+
+def start_server(module: str, arguments: Dict[str, Any]) -> None:  # pragma: no cover
+    """
+    Tries to find the asymmetric object and then runs an uvicorn server
+    with the parameters given to the method.
+    """
+    # Check that the application exists
+    get_asymmetric_object(module)
+
+    # Get filtered arguments
+    run_args = clear_runner_args(arguments)
+
+    if "log_level" in run_args:
+        # Set the logging level to the one of the command
+        os.environ["LOG_LEVEL"] = run_args["log_level"].upper()
+        configure_loggers()
+
+    uvicorn.run(f"{module}:asymmetric", **run_args)
 
 
 def document_openapi(module: str, filename: str) -> None:
