@@ -4,7 +4,7 @@
     <img src="https://img.shields.io/pypi/v/asymmetric?label=version&logo=python&logoColor=%23fff&color=306998&style=for-the-badge" alt="PyPI - Version">
 </a>
 
-_The async framework that calls you back_! ✨ Enable ridiculously fast and easy module-to-**[API](https://en.wikipedia.org/wiki/Web_API)** transformations. Learn in minutes, implement in seconds.
+_The async framework that calls you back_! ✨ Enable ridiculously fast and easy module-to-**[API](https://en.wikipedia.org/wiki/Web_API)** transformations. Learn in minutes, implement in seconds. Batteries included.
 
 <a href="https://github.com/daleal/asymmetric/actions?query=workflow%3Atests" target="_blank">
     <img src="https://img.shields.io/github/workflow/status/daleal/asymmetric/tests?label=tests&logo=python&logoColor=%23fff&style=for-the-badge" alt="Tests">
@@ -20,15 +20,15 @@ _The async framework that calls you back_! ✨ Enable ridiculously fast and easy
 
 ## Why Asymmetric?
 
-Raw developing speed and ease of use, that's why. `asymmetric` is based on **[Starlette](https://github.com/encode/starlette)** ✨! While `Starlette` is a powerful tool to have, getting it to work from scratch can be a bit of a pain, especially if you have never used it before. The idea behind `asymmetric` is to be able to take any module **already written** and transform it into a working API in a matter of minutes, instead of having to design the module ground-up to work with `Starlette` (it can also be used to build an API from scratch really fast). With `asymmetric`, you will also get some neat features, namely:
+Raw developing speed and ease of use, that's why. `asymmetric` is based on **[starlette](https://github.com/encode/starlette)** ✨! While `starlette` is a powerful tool to have, getting it to work from scratch can be a bit of a pain, especially if you have never used it before. The idea behind `asymmetric` is to be able to take any module **already written** and transform it into a working API in a matter of minutes, instead of having to design the module ground-up to work with `starlette` (it can also be used to build an API from scratch really fast). With `asymmetric`, you will also get some neat features, namely:
 
-- Auto logging (configure logs with the `LOG_FILE` and `LOG_LEVEL` environmental variables).
+- Auto logging (configure logs with the `LOG_FILE` environmental variable).
 - Server-side error detection and exception handling.
 - **Asynchronous callback endpoints** to make a request, terminate the request **immediately** and then have the server make a request to a _callback_ endpoint with the results! ✨
 - Auto-generated `/docs` and `/redoc` endpoint for your API with **interactive documentation**.
 - Auto-generated [OpenAPI Specification](https://swagger.io/docs/specification/about/) documentation files for your API.
 
-The [complete documentation](https://asymmetric.one/docs/) is available on the [official website](https://asymmetric.one/).
+`asymmetric` is the spiritual successor to [`symmetric`](https://github.com/daleal/symmetric). In fact, **the base API is identical** (you could probably search and replace `symmetric` for `asymmetric` in legacy code), but `asymmetric` uses a more modern underlying technology to achieve better performance and [**some nifty tricks**](#call-me-back). Its internal design is also **significantly** changed! 🎉
 
 ## Installing
 
@@ -42,13 +42,15 @@ pip install asymmetric
 
 ### Running the development server
 
-To start a server, choose your favorite `ASGI` server and target the `asymmetric` object!
+`asymmetric` has its own batteries included out of the box! To start your development API server, just run:
 
 ```sh
-uvicorn <module>:asymmetric
+asymmetric run <module> --reload
 ```
 
-Where `<module>` is your module name (in the examples, we will be writing in a file named `module.py`, so the module name will be just `module`). A `Starlette` instance will be spawned immediately and can be reached at [http://127.0.0.1:8000](http://127.0.0.1:8000) by default. We don't have any endpoints yet, so we'll add some later.
+Where `<module>` is your module name (in the examples, we will be writing in a file named `module.py`, so the module name will be just `module`). A `starlette` instance will be spawned immediately and can be reached at [http://127.0.0.1:8000](http://127.0.0.1:8000) by default. We don't have any endpoints yet, so we'll add some later. **All of the flags for `uvicorn` are accepted as flags for `asymmetric run`**.
+
+**Sidenote**: `asymmetric` is fully compatible with any `ASGI` server! If you don't know what that is, don't worry! You don't need to. But if you want to use another `ASGI` server, you can! Just make sure to target the `asymmetric` object! In fact, the `asymmetric run <module>` command is practically an _alias_ for `uvicorn <module>:asymmetric`. So yes, by default the server running will be `uvicorn`, but, if you want to, you can also use `daphne` or `hypercorn`!
 
 ### Defining the API endpoints
 
@@ -79,7 +81,7 @@ def some_function():
     return "Hello World!"
 ```
 
-Run `uvicorn module:asymmetric` and send a `GET` request to `http://127.0.0.1:8000/sample`. You should get a `Hello World!` in response! (To try it with a browser, make sure to run the above command and click [this link](http://127.0.0.1:8000/sample)).
+Run `asymmetric run module --reload` and send a `GET` request to `http://127.0.0.1:8000/sample`. You should get a `Hello World!` in response! (To try it with a browser, make sure to run the above command and click [this link](http://127.0.0.1:8000/sample)).
 
 But what about methods with arguments? Of course they can be API'd too! Let's now say that you have the following function:
 
@@ -106,7 +108,7 @@ def another_function(a, b=372):
 
 ### Querying API endpoints
 
-To give parameters to a function, all we need to do is send a `json` body with the names of the parameters as keys. Let's see how! Run `uvicorn module:asymmetric` and send a `POST` request (the default `HTTP` method) to `http://127.0.0.1:8000/add`, now using the `httpx` module.
+To give parameters to a function, all we need to do is send a `json` body with the names of the parameters as keys. Let's see how! Run `asymmetric run module --reload` and send a `POST` request (the default `HTTP` method) to `http://127.0.0.1:8000/add`, now using the `httpx` module.
 
 ```python
 import httpx
@@ -125,7 +127,7 @@ With this in mind, you can transform any existing project into a usable API very
 
 ## What about `async`?
 
-Given that the underlying framework is `Starlette`, you can use `async` to define your methods, no problem! Here's an example:
+Given that the underlying framework is `starlette`, you can use `async` to define your methods, no problem! Here's an example:
 
 ```py
 @asymmetric.router("/another-add")
@@ -173,7 +175,7 @@ async def predict(data):
     return values
 ```
 
-Start the server with `uvicorn module:asymmetric` and now you are able to call the endpoint using the following snippet:
+Start the server with `asymmetric run module --reload` and now you are able to call the endpoint using the following snippet:
 
 ```py
 import httpx
@@ -311,7 +313,10 @@ Run the tests:
 make tests
 ```
 
+## Aknowledgements
+
+This project wouldn't be possible without [Encode](https://github.com/encode), as literally all hard dependencies (`starlette` and `httpx`) are developed by them. Even `uvicorn` is theirs. Thanks guys! `asymmetric` also takes inspiration from [`FastAPI`](https://github.com/tiangolo/fastapi) on some implementation details, so thank you too for such an awesome project. Also, I want to thank **every person** who has given me some kind of advice or that has had to listen to me going on and on **and on** about this project and the reasons that make it **great**. Finally, thank you! Yes, you! If you are reading this, there is a good chance that you have at least some interest in `asymmetric`. If you have feedback, if you find a bug, if you want to ask for a _feature_ or even if you just want to talk, I'd be glad to hear from you! You're the reason this project exists ♥.
+
 ## Resources
 
-- [Official Website](https://asymmetric.one/)
 - [Issue Tracker](https://github.com/daleal/asymmetric/issues/)

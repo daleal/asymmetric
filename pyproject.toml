@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "asymmetric"
-version = "0.2.1"
-description = "The async framework that calls you back! Enable ridiculously fast and easy module-to-API transformations. Learn in minutes, implement in seconds."
+version = "0.3.0"
+description = "The async framework that calls you back! Enable ridiculously fast and easy module-to-API transformations. Learn in minutes, implement in seconds. Batteries included."
 license = "MIT"
 authors = ["Daniel Leal <dlleal@uc.cl>"]
 maintainers = ["Daniel Leal <dlleal@uc.cl>"]
@@ -31,13 +31,16 @@ exclude = [
     ".flake8",
     ".pylintrc",
     "mypy.ini",
-    "Makefile"
+    "Makefile",
+    "scripts",
+    "tests"
 ]
 
 [tool.poetry.dependencies]
 python = "^3.6"
 httpx = "^0.16.1"
 starlette = "^0.13.8"
+uvicorn = "^0.12.2"
 
 [tool.poetry.dev-dependencies]
 black = "^20.8b1"

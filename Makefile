@@ -63,3 +63,12 @@ linters!:
 	$(MAKE) flake8
 	$(MAKE) mypy
 	$(MAKE) pylint
+
+# Utilities
+.PHONY: bump!
+bump!:
+	sh scripts/bump.sh $(filter-out $@,$(MAKECMDGOALS))
+
+# Receive args (use like `$(filter-out $@,$(MAKECMDGOALS))`)
+%:
+	@:
