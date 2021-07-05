@@ -26,7 +26,6 @@ class Endpoint:
         self.__route: str = route
         self.__method: str = method
         self.__function: Callable[..., Any] = function
-        self.__decorated_function: Callable[..., Any] = decorated_function
         self.__callback = callback
         self.__response_code: int = response_code
 
